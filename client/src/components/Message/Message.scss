@@ -1,0 +1,75 @@
+@import '../../styles/varibles';
+
+.message {
+    $self: &;
+
+    display: flex;
+    align-items: flex-end;
+
+    margin-bottom: 15px;
+
+    &__avatar {
+        img {
+            border-radius: 50%;
+            width: 33px;
+            height: 33px;
+            margin-right: 13px;
+            margin-bottom: 23px;
+        }
+    }
+
+    &__content {
+        max-width: 440px;
+    }
+
+    &__bubble {
+        background-color: $blue;
+        box-shadow: 0, 5px, 5px rgba(54, 166, 255, 0.2);
+        border-radius: 12px 12px 12px 0;
+        padding: 15px;
+        margin-bottom: 8px;
+    }
+
+    &__text {
+        color: #fff;
+        line-height: 20px;
+    }
+
+    &__date {
+        font-size: 12px;
+        opacity: 0.5;
+    }
+
+    &--isme {
+        display: flex;
+        flex-direction: row-reverse;
+
+        #{$self}__avatar {
+            img {
+                margin-right: 0;
+                margin-left: 13px;
+            }
+        }
+
+        #{$self}__content {
+            text-align: right;
+        }
+
+        #{$self}__bubble {
+            background: #fff;
+            border: 1px solid #ececec;
+            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.02);
+            border-radius: 12px 12px 0 12px;
+
+            #{$self}__text {
+                color: $black;
+            }
+        }
+
+        #{$self}__check {
+            align-self: flex-end;
+            margin-right: 5px;
+            margin-bottom: 16px;
+        }
+    }
+}

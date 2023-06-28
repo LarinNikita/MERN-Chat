@@ -1,12 +1,18 @@
 import React from 'react'
-import { Auth } from './pages'
+
+import { Routes, Route } from 'react-router-dom'
+
+import { Auth, Home } from './pages'
 
 import './styles/index.scss'
 
 const App = () => {
   return (
     <div className="wrapper">
-      <Auth />
+      <Routes>
+        <Route path='/' element={<Auth />} />
+        <Route path='/im' element={<Home />} />
+      </Routes>
     </div>
   );
 }
