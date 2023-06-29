@@ -7,16 +7,27 @@ import doubleChecked from '../../assets/icons/bx-check-double.svg'
 import checked from '../../assets/icons/bx-check.svg'
 
 import './Message.scss'
+import { Avatar } from 'antd'
 
-const Message = ({ avatar, user, text, date, isMe, isReaded }) => {
+const Message = ({ avatar, user, text, date, isMe, isReaded, attachments }) => {
     return (
         <div className={classNames('message', { 'message--isme': isMe })}>
-            
+
             <div className="message__avatar">
                 <img src={avatar} alt={`Avatar ${user.fullName}`} />
             </div>
 
             <div className="message__content">
+                <div className="message__attachments">
+                    {
+                        attachments &&
+                        attachments.map((item, index) => (
+                            <div className="message__attachments-item" key={index}>
+                                <img src={item.url} alt={item.filename} />
+                            </div>
+                        ))
+                    }
+                </div>
                 <div className="message__bubble">
                     <p className='message__text'>{text}</p>
                 </div>
@@ -47,7 +58,8 @@ Message.propTypes = {
     avatar: PropTypes.string,
     user: PropTypes.object,
     text: PropTypes.string,
-    date: PropTypes.instanceOf(Date)
+    date: PropTypes.instanceOf(Date),
+    attachments: PropTypes.array
 }
 
 export default Message

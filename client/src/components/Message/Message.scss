@@ -40,6 +40,24 @@
         opacity: 0.5;
     }
 
+    &__attachments {
+        display: flex;
+        flex-wrap: wrap;
+
+        &-item {
+            margin-right: 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
+
+            img {
+                width: 45px;
+                height: 45px;
+                border-radius: 8px;
+                object-fit: cover;
+            }
+        }
+    }
+
     &--isme {
         display: flex;
         flex-direction: row-reverse;
@@ -71,5 +89,13 @@
             margin-right: 5px;
             margin-bottom: 16px;
         }
+
+        #{$self}__attachments {
+            &-item {
+                margin-right: 0;
+                margin-left: 10px;
+            }
+        }
+
     }
 }
