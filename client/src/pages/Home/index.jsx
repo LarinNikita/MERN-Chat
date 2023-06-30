@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Message } from '../../components'
+import { DialogItem, Message } from '../../components'
 
 import './Home.scss'
 
@@ -8,7 +8,23 @@ const Home = () => {
     const date = new Date();
     return (
         <section className='home' style={{ padding: '10px' }}>
-            <Message
+            <div className='dialogs'>
+                <DialogItem
+                    user={{
+                        fullname: "Зубенко Михаил Петрович",
+                        online: true
+                    }}
+                    unread={0}
+                />
+                <DialogItem
+                    user={{
+                        fullname: "Зубенко Михаил Петрович",
+                        online: false
+                    }}
+                    unread={25}
+                />
+            </div>
+            {/* <Message
                 avatar="https://images.unsplash.com/photo-1649123245135-4db6ead931b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTAzfHxhdmF0YXJ8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
                 text="Веб-сайт, посвященный фирменной стоковой фотографии. С 2021 года он принадлежит Getty Images."
                 date={date}
@@ -81,7 +97,7 @@ const Home = () => {
                         url: 'https://images.unsplash.com/photo-1585468274952-66591eb14165?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1332&q=80',
                     },
                 ]}
-            />
+            /> */}
         </section>
     )
 }

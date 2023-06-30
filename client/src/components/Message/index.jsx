@@ -1,12 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import ruLocale from 'date-fns/locale/ru'
 import classNames from 'classnames'
-import doubleChecked from '../../assets/icons/bx-check-double.svg'
-import checked from '../../assets/icons/bx-check.svg'
 
 import './Message.scss'
+import { Time, Readed } from '../'
 
 const Message = ({
     avatar,
@@ -54,19 +51,13 @@ const Message = ({
                     </div>
                 }
                 {date && <span className="message__date">
-                    {formatDistanceToNow(date, { addSuffix: true, locale: ruLocale })}
+                    <Time date={date} />
                 </span>}
             </div>
 
-            {isMe ? (
-                <div className='message__check'>
-                    {isReaded ? (
-                        <img src={doubleChecked} alt="Double checked icon" />
-                    ) : (
-                        <img src={checked} alt="Checked icon" />
-                    )}
-                </div>
-            ) : null}
+            <div className='message__check'>
+                <Readed isMe={isMe} isReaded={isReaded} />
+            </div>
 
         </div>
     )
@@ -82,6 +73,8 @@ Message.propTypes = {
     text: PropTypes.string,
     date: PropTypes.instanceOf(Date),
     attachments: PropTypes.array,
+    isMe: PropTypes.bool,
+    isReaded: PropTypes.bool,
     isTyping: PropTypes.bool
 }
 
