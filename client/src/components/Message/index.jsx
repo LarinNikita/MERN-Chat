@@ -7,11 +7,25 @@ import doubleChecked from '../../assets/icons/bx-check-double.svg'
 import checked from '../../assets/icons/bx-check.svg'
 
 import './Message.scss'
-import { Avatar } from 'antd'
 
-const Message = ({ avatar, user, text, date, isMe, isReaded, attachments }) => {
+const Message = ({
+    avatar,
+    user,
+    text,
+    date,
+    isMe,
+    isReaded,
+    attachments,
+    isTyping
+}) => {
     return (
-        <div className={classNames('message', { 'message--isme': isMe })}>
+        <div
+            className={classNames('message', {
+                'message--isme': isMe,
+                'message--is-typing': isTyping,
+                'message--image': attachments && attachments.length === 1,
+            })}
+        >
 
             <div className="message__avatar">
                 <img src={avatar} alt={`Avatar ${user.fullName}`} />
@@ -19,8 +33,7 @@ const Message = ({ avatar, user, text, date, isMe, isReaded, attachments }) => {
 
             <div className="message__content">
                 <div className="message__attachments">
-                    {
-                        attachments &&
+                    {attachments &&
                         attachments.map((item, index) => (
                             <div className="message__attachments-item" key={index}>
                                 <img src={item.url} alt={item.filename} />
@@ -28,12 +41,21 @@ const Message = ({ avatar, user, text, date, isMe, isReaded, attachments }) => {
                         ))
                     }
                 </div>
-                <div className="message__bubble">
-                    <p className='message__text'>{text}</p>
-                </div>
-                <span className="message__date">
+                {(text || isTyping) &&
+                    <div className="message__bubble">
+                        {text && <p className='message__text'>{text}</p>}
+                        {isTyping &&
+                            <div className="message__typing">
+                                <span />
+                                <span />
+                                <span />
+                            </div>
+                        }
+                    </div>
+                }
+                {date && <span className="message__date">
                     {formatDistanceToNow(date, { addSuffix: true, locale: ruLocale })}
-                </span>
+                </span>}
             </div>
 
             {isMe ? (
@@ -59,7 +81,8 @@ Message.propTypes = {
     user: PropTypes.object,
     text: PropTypes.string,
     date: PropTypes.instanceOf(Date),
-    attachments: PropTypes.array
+    attachments: PropTypes.array,
+    isTyping: PropTypes.bool
 }
 
 export default Message
