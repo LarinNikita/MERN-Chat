@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { DialogItem, Message } from '../../components'
+import { Dialogs, Message } from '../../components'
 
 import './Home.scss'
 
@@ -8,22 +8,51 @@ const Home = () => {
     const date = new Date();
     return (
         <section className='home' style={{ padding: '10px' }}>
-            <div className='dialogs'>
-                <DialogItem
-                    user={{
-                        fullname: "Зубенко Михаил Петрович",
-                        online: true
-                    }}
-                    unread={0}
-                />
-                <DialogItem
-                    user={{
-                        fullname: "Зубенко Михаил Петрович",
-                        online: false
-                    }}
-                    unread={25}
-                />
-            </div>
+            <Dialogs
+                userId={1}
+                items={[
+                    {
+                        _id: Math.random(),
+                        text: "Lorem Lorem Lorem Lorem Lorem Lorem",
+                        isReaded: false,
+                        created_at: new Date(),
+                        user: {
+                            _id: 1,
+                            fullname: "Иван Иванов",
+                            avatar: "https://images.unsplash.com/photo-1623330188314-8f4645626731?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTZ8fGF2YXRhcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=400&q=60",
+                            online: true
+                        },
+                        unread: 0
+                    },
+                    {
+                        _id: Math.random(),
+                        text: "Работа с датами очень трудна",
+                        isReaded: false,
+                        created_at: new Date("2023-06-30"),
+                        user: {
+                            _id: 1,
+                            fullname: "Иван Иванов",
+                            avatar: "https://images.unsplash.com/photo-1623330188314-8f4645626731?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTZ8fGF2YXRhcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=400&q=60",
+                            online: true
+                        },
+                        unread: 0
+                    },
+                    {
+                        _id: Math.random(),
+                        text: "Автоматическая аватарка",
+                        isReaded: false,
+                        created_at: new Date(),
+                        user: {
+                            _id: 1,
+                            fullname: "Фёдор Николаевич",
+                            avatar: null,
+                            online: false
+                        },
+                        unread: 1
+                    },
+                ]}
+            />
+
             {/* <Message
                 avatar="https://images.unsplash.com/photo-1649123245135-4db6ead931b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTAzfHxhdmF0YXJ8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
                 text="Веб-сайт, посвященный фирменной стоковой фотографии. С 2021 года он принадлежит Getty Images."

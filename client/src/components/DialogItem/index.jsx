@@ -1,16 +1,29 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import classNames from 'classnames'
 
 import { Avatar, Badge, Typography } from 'antd'
 import { UserOutlined } from '@ant-design/icons';
 import { Time, Readed } from '../'
 
+import format from 'date-fns/format'
+import isToday from 'date-fns/isToday'
+
 import './DialogItem.scss'
 
 const { Text } = Typography;
 
-const DialogItem = ({ user, message, unread }) => {
+const getMessageTime = created_at => {
+    if (isToday(created_at)) {
+        return format(
+            created_at, 'HH:mm'
+        )
+    } else {
+        return format(
+            created_at, 'dd.MM.yyyy'
+        )
+    }
+};
+
+const DialogItem = ({ user, message, unread, isMe }) => {
     return (
         <div className='dialog__item'>
             <div className='dialog__item-avatar'>
@@ -22,7 +35,7 @@ const DialogItem = ({ user, message, unread }) => {
                 >
                     <Avatar
                         size={42}
-                        src='https://images.unsplash.com/photo-1649123245135-4db6ead931b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTAzfHxhdmF0YXJ8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60'
+                        src={user.avatar}
                         icon={<UserOutlined />}
                     />
                 </Badge>
@@ -30,30 +43,26 @@ const DialogItem = ({ user, message, unread }) => {
             <div className="dialog__item-info">
                 <div className='dialog__item-info-top'>
                     <Text strong >
-                        Зубенко Михаил Петрович
+                        {user.fullname}
                     </Text>
                     <Text type="secondary">
-                        {/* <Time date={new Date()} /> */}
-                        17:19
+                        {/* <Time date={message.created_at} /> */}
+                        {getMessageTime(message.created_at)}
                     </Text>
                 </div>
                 <div className='dialog__item-info-bottom'>
                     <Text type="secondary">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Animi doloribus aspernatur corporis qui quisquam, recusandae quod dicta! Fugit, amet iusto?
+                        {message.text}
                     </Text>
                     {(unread > 0)
                         ? (<Badge color='#fd7967' style={{ fontSize: 12 }} count={unread} />)
-                        : (<Readed isMe={true} isReaded={true} />)
+                        : (isMe && <Readed isMe={true} isReaded={true} />)
                     }
 
                 </div>
             </div>
         </div>
     )
-}
-
-DialogItem.propTypes = {
-    className: PropTypes.string
 }
 
 export default DialogItem
