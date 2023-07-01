@@ -5,6 +5,19 @@ import classNames from 'classnames'
 import './Message.scss'
 import { Time, Readed } from '../'
 
+// import WaveSurfer from 'https://unpkg.com/wavesurfer.js@beta'
+
+// const wavesurfer = WaveSurfer.create({
+//   container: '#waveform',
+//   waveColor: '#4F4A85',
+//   progressColor: '#383351',
+//   url: 'https://www.myinstants.com/media/sounds/y2mate_HOnnyD0.mp3',
+// })
+
+// wavesurfer.on('interaction', () => {
+//   wavesurfer.play()
+// })
+
 const Message = ({
     avatar,
     user,
@@ -13,7 +26,8 @@ const Message = ({
     isMe,
     isReaded,
     attachments,
-    isTyping
+    isTyping,
+    audio
 }) => {
     return (
         <div
@@ -21,6 +35,7 @@ const Message = ({
                 'message--isme': isMe,
                 'message--is-typing': isTyping,
                 'message--image': attachments && attachments.length === 1,
+                'message--is-audio': audio,
             })}
         >
 
@@ -29,16 +44,16 @@ const Message = ({
             </div>
 
             <div className="message__content">
-                <div className="message__attachments">
-                    {attachments &&
-                        attachments.map((item, index) => (
+                {attachments &&
+                    <div className="message__attachments">
+                        {attachments.map((item, index) => (
                             <div className="message__attachments-item" key={index}>
                                 <img src={item.url} alt={item.filename} />
                             </div>
-                        ))
-                    }
-                </div>
-                {(text || isTyping) &&
+                        ))}
+                    </div>
+                }
+                {(text || isTyping || audio) &&
                     <div className="message__bubble">
                         {text && <p className='message__text'>{text}</p>}
                         {isTyping &&
@@ -46,6 +61,23 @@ const Message = ({
                                 <span />
                                 <span />
                                 <span />
+                            </div>
+                        }
+                        {
+                            audio &&
+                            <div className='message__audio'>
+                                <div className="message__audio-progress" style={{width: '60%'}}></div>
+                                <div className="message__audio-info">
+                                    <div className="message__audio-btn">
+                                        <button>||</button>
+                                    </div>
+                                    <div className="message__audio-wave">
+                                        <img src="" alt="audio wave" />
+                                    </div>
+                                    <span className="message__audio-duration">
+                                        00:19
+                                    </span>
+                                </div>
                             </div>
                         }
                     </div>
@@ -75,7 +107,8 @@ Message.propTypes = {
     attachments: PropTypes.array,
     isMe: PropTypes.bool,
     isReaded: PropTypes.bool,
-    isTyping: PropTypes.bool
+    isTyping: PropTypes.bool,
+    audio: PropTypes.string
 }
 
 export default Message

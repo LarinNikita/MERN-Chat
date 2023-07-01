@@ -23,7 +23,7 @@ const getMessageTime = created_at => {
     }
 };
 
-const DialogItem = ({ user, message, unread, isMe }) => {
+const DialogItem = ({ user, created_at, text, unread, isMe }) => {
     return (
         <div className='dialog__item'>
             <div className='dialog__item-avatar'>
@@ -47,12 +47,12 @@ const DialogItem = ({ user, message, unread, isMe }) => {
                     </Text>
                     <Text type="secondary">
                         {/* <Time date={message.created_at} /> */}
-                        {getMessageTime(message.created_at)}
+                        {getMessageTime(created_at)}
                     </Text>
                 </div>
                 <div className='dialog__item-info-bottom'>
                     <Text type="secondary">
-                        {message.text}
+                        {text}
                     </Text>
                     {(unread > 0)
                         ? (<Badge color='#fd7967' style={{ fontSize: 12 }} count={unread} />)
