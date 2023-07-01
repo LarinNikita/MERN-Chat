@@ -8,7 +8,7 @@ const Home = () => {
     const date = new Date();
     return (
         <section className='home' style={{ padding: '10px' }}>
-            <Dialogs
+            {/* <Dialogs
                 userId={1}
                 items={[
                     {
@@ -51,7 +51,7 @@ const Home = () => {
                         unread: 1
                     },
                 ]}
-            />
+            /> */}
 
             <Message
                 avatar="https://images.unsplash.com/photo-1649123245135-4db6ead931b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTAzfHxhdmF0YXJ8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"

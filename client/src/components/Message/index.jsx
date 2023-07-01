@@ -5,6 +5,12 @@ import classNames from 'classnames'
 import './Message.scss'
 import { Time, Readed } from '../'
 
+import wave from '../../assets/icons/wave.svg'
+import { Button } from 'antd'
+import { CaretUpOutlined, PauseOutlined } from '@ant-design/icons'
+
+import { convertCurrentTime } from '../../utils/helpers'
+
 // import WaveSurfer from 'https://unpkg.com/wavesurfer.js@beta'
 
 // const wavesurfer = WaveSurfer.create({
@@ -17,6 +23,66 @@ import { Time, Readed } from '../'
 // wavesurfer.on('interaction', () => {
 //   wavesurfer.play()
 // })
+
+const MessageAudio = ({ audioSrc }) => {
+    const [isPlay, setIsPlay] = React.useState(false);
+    const [progress, setProgress] = React.useState(0);
+    const [currentTime, setCurrentTime] = React.useState(0);
+    const audioRef = React.useRef(null);
+
+    React.useEffect(() => {
+        audioRef.current.addEventListener('playing', () => {
+            setIsPlay(true);
+        }, false);
+        audioRef.current.addEventListener('ended', () => {
+            setIsPlay(false);
+            setProgress(0);
+            setCurrentTime(0);
+        }, false);
+        audioRef.current.addEventListener('pause', () => {
+            setIsPlay(false);
+        }, false);
+        audioRef.current.addEventListener('timeupdate', () => {
+            const duration = audioRef.current && audioRef.current.duration || 0;
+            setCurrentTime(audioRef.current.currentTime);
+            setProgress((audioRef.current.currentTime / duration) * 100);
+        }, false);
+    }, []);
+
+    const togglePlay = () => {
+        if (!isPlay) {
+            audioRef.current.play();
+        } else {
+            audioRef.current.pause();
+        }
+    };
+
+    return (
+        <div className='message__audio'>
+            <audio ref={audioRef} src={audioSrc} preload="auto" />
+            <div className="message__audio-progress" style={{ width: progress + '%' }}></div>
+            <div className="message__audio-info">
+                <div className="message__audio-btn">
+                    <Button
+                        type="primary"
+                        shape="circle"
+                        icon={isPlay
+                            ? <PauseOutlined style={{ fontSize: 18, marginTop: 1 }} />
+                            : <CaretUpOutlined rotate={90} style={{ fontSize: 18, marginLeft: 2 }} />
+                        }
+                        onClick={togglePlay}
+                    />
+                </div>
+                <div className="message__audio-wave">
+                    {[...Array(7)].map((_, index) => <img key={index} src={wave} alt="audio wave" />)}
+                </div>
+                <span className="message__audio-duration">
+                    {convertCurrentTime(currentTime)}
+                </span>
+            </div>
+        </div>
+    )
+}
 
 const Message = ({
     avatar,
@@ -63,22 +129,8 @@ const Message = ({
                                 <span />
                             </div>
                         }
-                        {
-                            audio &&
-                            <div className='message__audio'>
-                                <div className="message__audio-progress" style={{width: '60%'}}></div>
-                                <div className="message__audio-info">
-                                    <div className="message__audio-btn">
-                                        <button>||</button>
-                                    </div>
-                                    <div className="message__audio-wave">
-                                        <img src="" alt="audio wave" />
-                                    </div>
-                                    <span className="message__audio-duration">
-                                        00:19
-                                    </span>
-                                </div>
-                            </div>
+                        {audio &&
+                            <MessageAudio audioSrc={audio} />
                         }
                     </div>
                 }
