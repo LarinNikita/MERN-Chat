@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { Avatar, Badge, Typography } from 'antd'
-import { UserOutlined } from '@ant-design/icons';
-import { Time, Readed } from '../'
+import { Badge, Typography } from 'antd'
+import { Readed, UserAvatar } from '../'
+import { AvatarUser } from '../'
 
 import format from 'date-fns/format'
 import isToday from 'date-fns/isToday'
@@ -23,6 +23,7 @@ const getMessageTime = created_at => {
     }
 };
 
+
 const DialogItem = ({ user, created_at, text, unread, isMe }) => {
     return (
         <div className='dialog__item'>
@@ -33,11 +34,7 @@ const DialogItem = ({ user, created_at, text, unread, isMe }) => {
                     offset={[-7, 37]}
                     dot={user.online}
                 >
-                    <Avatar
-                        size={42}
-                        src={user.avatar}
-                        icon={<UserOutlined />}
-                    />
+                    <AvatarUser user={user} />
                 </Badge>
             </div>
             <div className="dialog__item-info">
