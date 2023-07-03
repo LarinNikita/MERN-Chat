@@ -23,9 +23,9 @@ const getMessageTime = created_at => {
 };
 
 
-const DialogItem = ({ user, created_at, text, unread, isMe }) => {
+const DialogItem = ({ _id, user, created_at, text, unread, isMe, onSelect }) => {
     return (
-        <div className='dialogs__item'>
+        <div className='dialogs__item' onClick={onSelect.bind(this, _id)}>
             <div className='dialogs__item-avatar'>
                 <Badge
                     color='green'

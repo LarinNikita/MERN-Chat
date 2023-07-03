@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 import './Message.scss'
-import { Time, Readed } from '../'
+import { Time, Readed, AvatarUser } from '../'
 
 import wave from '../../assets/icons/wave.svg'
 import { Button } from 'antd'
@@ -106,7 +106,8 @@ const Message = ({
         >
 
             <div className="message__avatar">
-                <img src={avatar} alt={`Avatar ${user.fullName}`} />
+                <AvatarUser user={user} />
+                {/* <img src={avatar} alt={`Avatar ${user.fullName}`} /> */}
             </div>
 
             <div className="message__content">

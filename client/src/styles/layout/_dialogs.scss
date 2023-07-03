@@ -71,6 +71,13 @@
         height: calc(100vh - 112px);
         overflow: auto;
         position: relative;
+
+        .ant-spin {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     }
 
     .ant-empty {

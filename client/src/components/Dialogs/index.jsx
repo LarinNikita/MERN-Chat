@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import orderBy from 'lodash/orderBy';
 import { DialogItem } from '../';
 import { Input, Empty } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 
+import { connect } from 'react-redux'
+import { dialogsActions } from '../../redux/actions'
+
 import './Dialogs.scss';
 
-const Dialogs = ({ items, userId }) => {
+const Dialogs = ({ fetchDialogs, setCurrentDialogId, items, userId }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [filter, setFilter] = useState(Array.from(items));
 
@@ -16,6 +19,14 @@ const Dialogs = ({ items, userId }) => {
         );
         setSearchQuery(value);
     };
+
+    useEffect(() => {
+        if (!items.length) {
+            fetchDialogs();
+        } else {
+            setFilter(items);
+        }
+    }, [items]);
 
     return (
         <div className='dialogs'>
@@ -34,6 +45,7 @@ const Dialogs = ({ items, userId }) => {
                                 key={item._id}
                                 isMe={item.user._id === userId}
                                 {...item}
+                                onSelect={setCurrentDialogId}
                             />
                         ))
                 ) : (
@@ -47,4 +59,4 @@ const Dialogs = ({ items, userId }) => {
     );
 };
 
-export default Dialogs;
+export default connect(({ dialogs }) => dialogs, dialogsActions)(Dialogs);
