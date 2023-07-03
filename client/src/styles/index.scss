@@ -1,7 +1,46 @@
+@import "~reset-css";
+@import "./varibles";
+@import "./layout/dialogs";
+
 html,
 body,
 #root,
 .wrapper {
-    height: 100%;
     color: #202002;
+    font-size: 14px;
+}
+
+body {
+    background-color: #f4f7fd;
+}
+
+* {
+    --scrollbar-foreground: #f7f7f7;
+    --scrollbar-background: #fff;
+    --scrollbar-size: 4px;
+    /* плашка-бегунок, фон */
+    scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
+}
+
+*::-webkit-scrollbar {
+    width: var(--scrollbar-size);
+    /* в основном для вертикальных полос прокрутки */
+    height: var(--scrollbar-size);
+    /* в основном для горизонтальных полос прокрутки */
+}
+
+*::-webkit-scrollbar-thumb {
+    /* плашка-бегунок */
+    background: var(--scrollbar-foreground);
+    /* фон */
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    /* фон */
+    background: var(--scrollbar-background);
+}
+
+.ant-btn-link {
+    color: #8c8c8c;
 }

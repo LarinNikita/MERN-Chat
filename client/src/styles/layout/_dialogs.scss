@@ -1,0 +1,89 @@
+.wrapper {
+    display: flex;
+    background-color: #fff;
+    max-width: 1200px;
+    height: 100%;
+    margin: 0 auto;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
+}
+
+.sidebar {
+    background-color: #fff !important;
+
+    border-right: 1px solid #f7f7f7;
+
+    &__header {
+        background-color: #fff;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding: 20px;
+        height: auto;
+
+        &--title {
+            margin-bottom: 0 !important;
+
+            span {
+                margin-right: 5px;
+            }
+        }
+    }
+
+    &__search {
+        margin: 0 20px 20px 20px;
+        width: 280px;
+    }
+}
+
+.chat {
+    flex: 1;
+    background-color: #fff;
+
+    &__header {
+        background-color: #fff;
+        padding: 10px 20px;
+        height: auto;
+        border-bottom: 1px solid #f7f7f7;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &--user {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .ant-badge {
+                line-height: 1;
+            }
+
+            strong {
+                font-weight: 700;
+            }
+        }
+    }
+
+    &__messages {
+        padding: 20px;
+        height: calc(100vh - 112px);
+        overflow: auto;
+        position: relative;
+
+        .ant-spin {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+
+    .ant-empty {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}

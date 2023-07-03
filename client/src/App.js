@@ -1,13 +1,17 @@
 import React from 'react'
-import { Auth } from './pages'
+import { Routes, Route } from 'react-router-dom'
+
+import { Home, Login, Registration } from './pages'
 
 import './styles/index.scss'
 
 const App = () => {
   return (
-    <div className="wrapper">
-      <Auth />
-    </div>
+    <Routes>
+      <Route path='/' element={<Home />} />
+      <Route path='/login' element={<Login />} />
+      <Route path='/register' element={<Registration />} />
+    </Routes>
   );
 }
 
