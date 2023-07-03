@@ -1,8 +1,7 @@
 import React from 'react'
 
 import { Badge, Typography } from 'antd'
-import { Readed, UserAvatar } from '../'
-import { AvatarUser } from '../'
+import { Readed, AvatarUser } from '../'
 
 import format from 'date-fns/format'
 import isToday from 'date-fns/isToday'
@@ -26,8 +25,8 @@ const getMessageTime = created_at => {
 
 const DialogItem = ({ user, created_at, text, unread, isMe }) => {
     return (
-        <div className='dialog__item'>
-            <div className='dialog__item-avatar'>
+        <div className='dialogs__item'>
+            <div className='dialogs__item-avatar'>
                 <Badge
                     color='green'
                     style={{ padding: 5, border: '2.3px solid #fff' }}
@@ -37,17 +36,18 @@ const DialogItem = ({ user, created_at, text, unread, isMe }) => {
                     <AvatarUser user={user} />
                 </Badge>
             </div>
-            <div className="dialog__item-info">
-                <div className='dialog__item-info-top'>
+            <div className="dialogs__item-info">
+                <div className='dialogs__item-info-top'>
                     <Text strong >
                         {user.fullname}
                     </Text>
                     <Text type="secondary">
                         {/* <Time date={message.created_at} /> */}
-                        {getMessageTime(created_at)}
+                        {/* {getMessageTime(created_at)} */}
+                        {new Date(created_at).toLocaleString()}
                     </Text>
                 </div>
-                <div className='dialog__item-info-bottom'>
+                <div className='dialogs__item-info-bottom'>
                     <Text type="secondary">
                         {text}
                     </Text>

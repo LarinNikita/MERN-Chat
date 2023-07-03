@@ -1,72 +1,46 @@
 @import "~reset-css";
 @import "./varibles";
+@import "./layout/dialogs";
 
 html,
 body,
 #root,
 .wrapper {
-    height: 100%;
     color: #202002;
     font-size: 14px;
 }
 
-// .auth {
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     height: 100%;
+body {
+    background-color: #f4f7fd;
+}
 
-//     &__top {
-//         text-align: center;
-//         margin-bottom: 50px;
+* {
+    --scrollbar-foreground: #f7f7f7;
+    --scrollbar-background: #fff;
+    --scrollbar-size: 4px;
+    /* плашка-бегунок, фон */
+    scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
+}
 
-//         h2 {
-//             font-size: 28px;
-//             margin-bottom: 5px;
-//         }
+*::-webkit-scrollbar {
+    width: var(--scrollbar-size);
+    /* в основном для вертикальных полос прокрутки */
+    height: var(--scrollbar-size);
+    /* в основном для горизонтальных полос прокрутки */
+}
 
-//         p {
-//             font-size: 18px;
-//             line-height: 21px;
-//             letter-spacing: 0.1px;
-//             opacity: 0.5;
-//         }
-//     }
+*::-webkit-scrollbar-thumb {
+    /* плашка-бегунок */
+    background: var(--scrollbar-foreground);
+    /* фон */
+    border-radius: 10px;
+}
 
-//     &__register--link {
-//         text-align: center;
-//         display: block;
-//         font-size: 16px;
-//         letter-spacing: 0.1px;
-//         color: #adadad;
-//     }
+*::-webkit-scrollbar-track {
+    /* фон */
+    background: var(--scrollbar-background);
+}
 
-//     &__success-block {
-//         display: flex;
-//         justify-content: center;
-//         flex-direction: column;
-//         text-align: center;
-//         height: 400px;
-
-//         h2 {
-//             font-size: 20px;
-//             margin-bottom: 5px;
-//         }
-
-//         p {
-//             opacity: 0.5;
-//         }
-//     }
-
-//     .button {
-//         text-transform: uppercase;
-//         font-weight: 600;
-//         font-size: 14px;
-//         letter-spacing: 0.1px;
-//         width: 100%;
-//     }
-
-//     .box {
-//         width: 430px;
-//     }
-// }
+.ant-btn-link {
+    color: #8c8c8c;
+}

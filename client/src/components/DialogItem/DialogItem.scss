@@ -1,8 +1,14 @@
-.dialog__item {
+.dialogs__item {
     display: flex;
-    width: 300px;
-    margin-bottom: 20px;
+    // width: 300px;
+    // margin-bottom: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
 
+    &:active,
+    &:hover {
+        background-color: #f3f7ff;
+    }
 
     &-avatar {
         margin-right: 10px;
