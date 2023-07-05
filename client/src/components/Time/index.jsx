@@ -12,7 +12,7 @@ const Time = ({ date }) => {
 }
 
 Time.propTypes = {
-    date: PropTypes.instanceOf(Date),
+    date: PropTypes.string,
 }
 
 export default Time

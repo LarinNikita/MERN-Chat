@@ -8,4 +8,12 @@
             transition: opacity 0.15s ease-in-out;
         }
     }
+
+    position: relative;
+
+    &__emoji {
+        position: absolute;
+        bottom: 55px;
+        left: 10px;
+    }
 }

@@ -15,8 +15,8 @@ body {
 }
 
 * {
-    --scrollbar-foreground: #f7f7f7;
-    --scrollbar-background: #fff;
+    --scrollbar-foreground: #a8a8a8;
+    --scrollbar-background: #f1f1f1;
     --scrollbar-size: 4px;
     /* плашка-бегунок, фон */
     scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);

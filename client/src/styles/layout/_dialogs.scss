@@ -67,10 +67,7 @@
     }
 
     &__messages {
-        padding: 20px;
         height: calc(100vh - 112px);
-        overflow: auto;
-        position: relative;
 
         .ant-spin {
             position: absolute;
