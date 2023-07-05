@@ -1,5 +1,5 @@
 import React from 'react'
-
+import classNames from 'classnames'
 import { Badge, Typography } from 'antd'
 import { Readed, AvatarUser } from '../'
 
@@ -23,9 +23,11 @@ const getMessageTime = created_at => {
 };
 
 
-const DialogItem = ({ _id, user, created_at, text, unread, isMe, onSelect }) => {
+const DialogItem = ({ _id, user, created_at, text, unread, isMe, onSelect, selected }) => {
     return (
-        <div className='dialogs__item' onClick={onSelect.bind(this, _id)}>
+        <div className={classNames('dialogs__item', {
+            "dialogs__item--selected": selected === _id
+        })} onClick={onSelect.bind(this, _id)}>
             <div className='dialogs__item-avatar'>
                 <Badge
                     color='green'
@@ -44,7 +46,8 @@ const DialogItem = ({ _id, user, created_at, text, unread, isMe, onSelect }) => 
                     <Text type="secondary">
                         {/* <Time date={message.created_at} /> */}
                         {/* {getMessageTime(created_at)} */}
-                        {new Date(created_at).toLocaleString()}
+                        {getMessageTime(new Date(created_at))}
+                        {/* {new Date(created_at).toLocaleString()} */}
                     </Text>
                 </div>
                 <div className='dialogs__item-info-bottom'>

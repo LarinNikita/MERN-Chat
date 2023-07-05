@@ -88,7 +88,8 @@ const Message = ({
     avatar,
     user,
     text,
-    date,
+    // date,
+    created_at,
     isMe,
     isReaded,
     attachments,
@@ -135,8 +136,8 @@ const Message = ({
                         }
                     </div>
                 }
-                {date && <span className="message__date">
-                    <Time date={date} />
+                {created_at && <span className="message__date">
+                    <Time date={new Date(created_at)} />
                 </span>}
             </div>
 

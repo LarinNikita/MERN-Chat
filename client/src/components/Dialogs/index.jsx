@@ -9,7 +9,7 @@ import { dialogsActions } from '../../redux/actions'
 
 import './Dialogs.scss';
 
-const Dialogs = ({ fetchDialogs, setCurrentDialogId, items, userId }) => {
+const Dialogs = ({ fetchDialogs, currentDialogId, setCurrentDialogId, items, userId }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [filter, setFilter] = useState(Array.from(items));
 
@@ -46,6 +46,7 @@ const Dialogs = ({ fetchDialogs, setCurrentDialogId, items, userId }) => {
                                 isMe={item.user._id === userId}
                                 {...item}
                                 onSelect={setCurrentDialogId}
+                                selected={currentDialogId}
                             />
                         ))
                 ) : (

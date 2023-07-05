@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
 
 import { SmileOutlined, PaperClipOutlined, AudioOutlined, SendOutlined, DownloadOutlined } from '@ant-design/icons'
-import { Button, Input, Upload, Modal, List, Empty } from 'antd'
+import { Button, Input, Upload, Modal, Empty } from 'antd'
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
 
 import './ChatInput.scss'
 
 const ChatInput = () => {
 
     const [value, setValuue] = React.useState('');
-
     const [visible, setVisible] = useState(false);
+    const [visibleEmoji, setVisibleEmoji] = useState(false);
     const [fileList, setFileList] = useState([]);
 
     const handleUpload = () => {
@@ -24,8 +26,8 @@ const ChatInput = () => {
 
     const handleCancel = () => {
         // При отмене загрузки файлов можно сбросить список файлов
-        setFileList([]);
         setVisible(false);
+        setFileList([]);
     };
 
     const handleFileChange = (info) => {
@@ -46,12 +48,31 @@ const ChatInput = () => {
         setFileList(fileList);
     };
 
+    const toggleEmoji = () => {
+        setVisibleEmoji(!visibleEmoji);
+    }
+
     return (
         <div className='send'>
+            {visibleEmoji &&
+                <div className='send__emoji'>
+                    <Picker
+                        data={data}
+                        theme="light"
+                        navPosition="bottom"
+                        previewPosition="none"
+                        skinTonePosition="none"
+                    />
+                </div>
+            }
             <Input
                 size='large'
                 prefix={
-                    <Button type="link" shape="circle" icon={<SmileOutlined />} />
+                    <Button
+                        onClick={toggleEmoji}
+                        type="link"
+                        icon={<SmileOutlined />}
+                    />
                 }
                 placeholder='Введите текст сообщения...'
                 onChange={(e) => setValuue(e.target.value)}
@@ -72,6 +93,7 @@ const ChatInput = () => {
                             ]}
                         >
                             <Upload
+                                beforeUpload={() => false} // Отключение отправки файлов на сервер
                                 multiple
                                 onChange={handleFileChange}
                                 fileList={fileList}
