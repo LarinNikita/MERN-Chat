@@ -1,1 +1,0 @@
-export { registerValidation } from './auth'
