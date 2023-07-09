@@ -1,2 +1,2 @@
-// export { default as createJWT } from './createJWT'
-// export { default as verifyJWT } from './verifyJWT'
+export { default as createJWTToken } from './createJWTToken'
+export { default as verifyJWTToken } from './verifyJWTToken'

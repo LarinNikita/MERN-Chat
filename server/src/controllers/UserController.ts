@@ -1,8 +1,9 @@
-import express from "express"
+import express, { Request, Response } from "express"
 import { UserModel } from '../models'
+import { createJWTToken } from "../utils"
 
 class UserController {
-    async show(req: express.Request, res: express.Response) {
+    async show(req: Request, res: Response) {
         try {
             const id: string = req.params.id
             const user = await UserModel.findById(id)
@@ -13,7 +14,7 @@ class UserController {
             })
         }
     }
-    async create(req: express.Request, res: express.Response) {
+    async create(req: Request, res: Response) {
         try {
             const doc = new UserModel({
                 email: req.body.email,
@@ -29,7 +30,7 @@ class UserController {
             })
         }
     }
-    async delete(req: express.Request, res: express.Response) {
+    async delete(req: Request, res: Response) {
         try {
             const id: string = req.params.id
             const user = await UserModel.findOneAndDelete({ _id: id })
@@ -47,7 +48,7 @@ class UserController {
             })
         }
     }
-    async update(req: express.Request, res: express.Response) {
+    async update(req: Request, res: Response) {
         try {
             const id: string = req.params.id
             const user = await UserModel.updateOne(
@@ -71,6 +72,40 @@ class UserController {
             res.status(500).json({
                 message: 'Не удалось обновить пользователя'
             })
+        }
+    }
+    async login(req: Request, res: Response) {
+        try {
+            const user = await UserModel.findOne({ email: req.body.email });
+
+            if (!user) {
+                return res.status(404).json({
+                    message: 'Неверный логин или пароль',
+                });
+            }
+
+            const doc = {
+                email: req.body.login,
+                password: req.body.password
+            }
+
+            if (user.password === doc.password) {
+                const token = createJWTToken(doc)
+                res.status(200).json({
+                    user,
+                    token,
+                });
+            } else {
+                res.status(404).json({
+                    message: 'Неверный логин или пароль',
+                });
+            }
+
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({
+                message: 'Не удалось авторизоваться',
+            });
         }
     }
 }
