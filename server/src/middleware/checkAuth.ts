@@ -1,23 +1,22 @@
-import express, { Request, Response, NextFunction } from 'express'
-import { verifyJWTToken } from '../utils'
-import { IUser } from '../models/User'
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { Request, Response, NextFunction } from "express";
 
-export default (req: any, res: any, next: any) => {
-    try {
-        const token = (req.headers.authorization || '').replace(/Bearer\s?/, '');
+export default (req: Request, res: Response, next: NextFunction) => {
+    const token = (req.headers.authorization || '').replace(/Bearer\s?/, '');
 
-        verifyJWTToken(token).then(user => {
-            req.user = user
-            next()
-        }).catch(() => {
-            res.status(403).json({
-                message: 'Что-то пошло не так'
+    if (token) {
+        try {
+            const decoded = jwt.verify(token, `${process.env.JWT_SECRET}`) as JwtPayload;
+            req.user = decoded._id;
+            next();
+        } catch (err) {
+            return res.status(403).json({
+                message: 'Нет доступа'
             });
-        })
-
-    } catch (err) {
-        res.status(500).json({
-            message: 'Что-то пошло не так'
+        }
+    } else {
+        return res.status(403).json({
+            message: 'Нет доступа'
         });
     }
 }

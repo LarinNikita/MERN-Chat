@@ -4,7 +4,10 @@ import { DialogModel, MessageModel } from '../models'
 class DialogController {
     async index(req: Request, res: Response) {
         try {
-            const userId: any = req.params.id
+            const userId = req.user
+
+            console.log(userId)
+
             const dialog = await DialogModel
                 .find({ sender: userId })
                 .populate([
