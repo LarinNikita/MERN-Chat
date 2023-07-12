@@ -1,19 +1,25 @@
-import mongoose from "mongoose"
+import { Schema, model, Document } from "mongoose"
 
-const DialogSchema = new mongoose.Schema(
+export interface IDialog extends Document {
+    sender: Schema.Types.ObjectId;
+    recipient: Schema.Types.ObjectId;
+    messages: Schema.Types.ObjectId[];
+}
+
+const DialogSchema = new Schema(
     {
         sender: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'User',
             required: true
         },
         recipient: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'User',
             required: true
         },
         messages: [{
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'Message'
         }]
     },
@@ -22,5 +28,4 @@ const DialogSchema = new mongoose.Schema(
     }
 )
 
-const DialogModel = mongoose.model('Dialog', DialogSchema)
-export default DialogModel
+export default model<IDialog>('Dialog', DialogSchema)

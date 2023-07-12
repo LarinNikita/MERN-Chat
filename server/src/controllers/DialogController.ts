@@ -4,32 +4,25 @@ import { DialogModel, MessageModel } from '../models'
 class DialogController {
     async index(req: Request, res: Response) {
         try {
-            const userId = req.user
-
-            console.log(userId)
-
             const dialog = await DialogModel
-                .find({ sender: userId })
+                .find({ sender: req.user })
                 .populate([
-                    { path: 'sender', select: ['fullname', 'avatar'] },
-                    { path: 'recipient', select: ['fullname', 'avatar'] }
+                    { path: 'sender', select: 'fullname avatar' },
+                    { path: 'recipient', select: 'fullname avatar' },
+                    { path: 'messages', select: 'user' }
                 ])
                 .exec()
-                
             res.json(dialog)
-
         } catch (err) {
             res.status(500).json({
-                message: 'Не удалось получить диалог'
+                message: 'Не удалось получить диалог.'
             })
         }
     }
     async create(req: Request, res: Response) {
         try {
-            const dialogDoc = new DialogModel({
-                sender: req.body.sender,
-                recipient: req.body.recipient
-            })
+            const { sender, recipient } = req.body;
+            const dialogDoc = new DialogModel({ sender, recipient });
             const dialog = await dialogDoc.save();
 
             const messageDoc = new MessageModel({
@@ -39,14 +32,13 @@ class DialogController {
             });
             const message = await messageDoc.save();
 
-            dialog.messages.push(message._id);
+            dialog.messages.push(message.toObject());
             await dialog.save();
 
             res.json(dialog);
-
         } catch (err) {
             res.status(500).json({
-                message: 'Не удалось создать диалог',
+                message: 'Не удалось создать диалог.'
             });
         }
     }

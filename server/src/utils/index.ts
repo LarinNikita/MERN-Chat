@@ -1,3 +1,1 @@
-export { default as createJWTToken } from './createJWTToken'
-export { default as verifyJWTToken } from './verifyJWTToken'
-export { default as createUserPassword } from './createUserPassword'
+export { default as handlValidation } from './handlValidation'

@@ -1,9 +1,16 @@
-import mongoose from "mongoose"
+import mongoose, { Schema, model, Document } from "mongoose"
+
+export interface IMessage extends Document {
+    user: mongoose.Types.ObjectId;
+    text?: String;
+    dialog: mongoose.Types.ObjectId;
+    read?: boolean;
+}
 
 const MessageSchema = new mongoose.Schema(
     {
         user: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'User',
             required: true
         },
@@ -12,7 +19,7 @@ const MessageSchema = new mongoose.Schema(
             required: Boolean
         },
         dialog: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: 'Dialog',
             required: true
         },
@@ -26,5 +33,4 @@ const MessageSchema = new mongoose.Schema(
     }
 )
 
-const MessageModel = mongoose.model('Message', MessageSchema)
-export default MessageModel
+export default model<IMessage>('Message', MessageSchema)

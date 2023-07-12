@@ -17,7 +17,6 @@ class UserController {
             })
         }
     }
-
     async create(req: Request, res: Response) {
         try {
             const { email, fullname, avatar, password } = req.body;
@@ -91,39 +90,66 @@ class UserController {
             })
         }
     }
-    // async login(req: Request, res: Response) {
-    //     try {
-    //         const user = await UserModel.findOne({ email: req.body.email });
+    async login(req: Request, res: Response) {
+        try {
+            const user = await UserModel.findOne({ email: req.body.email });
 
-    //         if (!user) {
-    //             return res.status(404).json({
-    //                 message: 'Пользователь не найден',
-    //             });
-    //         }
+            if (!user) {
+                return res.status(404).json({
+                    message: 'Неверный логин или пароль.'
+                })
+            }
 
-    //         const doc = {
-    //             email: req.body.login,
-    //             password: req.body.password
-    //         }
+            const isValidPassword = await bcrypt.compare(req.body.password, user.toObject().passwordHash);
 
-    //         if (bcrypt.compareSync(doc.password, user.password)) {
-    //             const token = createJWTToken(doc)
-    //             res.status(200).json({
-    //                 user, token
-    //             });
-    //         } else {
-    //             res.status(404).json({
-    //                 message: 'Неверный логин или пароль',
-    //             });
-    //         }
+            if (!isValidPassword) {
+                return res.status(404).json({
+                    message: 'Неверный логин или пароль.'
+                })
+            }
 
-    //     } catch (err) {
-    //         console.log(err);
-    //         res.status(500).json({
-    //             message: 'Не удалось авторизоваться',
-    //         });
-    //     }
-    // }
+            const token = jwt.sign(
+                { _id: user._id },
+                `${process.env.JWT_SECRET}` || '',
+                { expiresIn: process.env.JWT_MAX_AGE, algorithm: 'HS256' }
+            );
+
+            const { passwordHash, ...userData } = user.toObject();
+
+            res.status(201).json([{
+                ...userData,
+                token
+            },
+            {
+                message: 'Авторизация прошла успешно.'
+            }])
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({
+                message: 'Не удалось авторизоваться.',
+            });
+        }
+    }
+    async getMe(req: Request, res: Response) {
+        try {
+            const user = await UserModel.findById(req.user);
+
+            if (!user) {
+                return res.status(404).json({
+                    message: 'Пользователь не найден.'
+                })
+            }
+
+            const { passwordHash, ...userData } = user.toObject();
+
+            res.status(200).json(userData);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({
+                message: 'Нет доступа.'
+            });
+        }
+    }
 }
 
 export default UserController
