@@ -4,7 +4,8 @@ import { Request, Response, NextFunction } from "express";
 export default (req: Request, res: Response, next: NextFunction) => {
     if (
         req.path === "/user/registration" ||
-        req.path === "/user/login"
+        req.path === "/user/login" ||
+        req.path === "/"
     ) {
         return next();
     }

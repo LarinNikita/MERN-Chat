@@ -1,8 +1,14 @@
 import { Request, Response } from "express"
+import socket from 'socket.io'
 import { DialogModel, MessageModel } from '../models'
 
 class DialogController {
-    async index(req: Request, res: Response) {
+    io: socket.Server;
+    constructor(io: socket.Server) {
+        this.io = io;
+    }
+
+    index = async (req: Request, res: Response) => {
         try {
             const dialog = await DialogModel
                 .find({ sender: req.user })
@@ -19,7 +25,7 @@ class DialogController {
             })
         }
     }
-    async create(req: Request, res: Response) {
+    create = async (req: Request, res: Response) => {
         try {
             const { sender, recipient } = req.body;
             const dialogDoc = new DialogModel({ sender, recipient });
@@ -42,7 +48,7 @@ class DialogController {
             });
         }
     }
-    async delete(req: Request, res: Response) {
+    delete = async (req: Request, res: Response) => {
         try {
             const id: string = req.params.id
             const dialog = await DialogModel.findOneAndDelete({ _id: id })

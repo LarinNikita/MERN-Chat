@@ -1,8 +1,14 @@
 import { Request, Response } from "express"
+import socket from 'socket.io'
 import { DialogModel, MessageModel } from '../models'
 
 class MessageController {
-    async index(req: Request, res: Response) {
+    io: socket.Server;
+    constructor(io: socket.Server) {
+        this.io = io;
+    }
+
+    index = async (req: Request, res: Response) => {
         try {
             const dialogId = req.params.id;
             const message = await MessageModel
@@ -17,15 +23,15 @@ class MessageController {
             })
         }
     }
-    async create(req: Request, res: Response) {
+    create = async (req: Request, res: Response) => {
         try {
             const userId = req.user;
-            const doc = new MessageModel({
+            const doc = await new MessageModel({
                 user: userId,
                 dialog: req.body.dialog,
                 text: req.body.text
-            });
-            const message = await doc.save();
+            }).populate({ path: 'dialog', select: '-messages' });
+            const message = await doc.save()
 
             DialogModel.updateOne(
                 { _id: req.body.dialog },
@@ -33,13 +39,14 @@ class MessageController {
             ).exec();
 
             res.status(200).json(message);
+            this.io.emit("SERVER:NEW_MESSAGE", message);
         } catch (err) {
             res.status(500).json({
                 message: 'Не удалось добавить сообщение.'
             })
         }
     }
-    async delete(req: Request, res: Response) {
+    delete = async (req: Request, res: Response) => {
         try {
             const id = req.params.id
             const message = await MessageModel.findOneAndDelete({ _id: id })

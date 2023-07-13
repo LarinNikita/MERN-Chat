@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Socket.IO chat TEST</title>
+</head>
+
+<body>
+</body>
+<script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
+<script>
+    window.onload = function () {
+        var socket = io('http://localhost:4444');
+
+        window.socket = socket;
+
+        socket.on('SERVER:NEW_MESSAGE', function (msg) {
+            if (window.user !== msg.user) {
+                console.log('New message ', msg);
+            }
+        })
+    }
+</script>
+
+</html>

@@ -1,10 +1,16 @@
 import { Request, Response } from "express"
+import socket from 'socket.io'
 import { UserModel } from '../models'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 class UserController {
-    async show(req: Request, res: Response) {
+    io: socket.Server;
+    constructor(io: socket.Server) {
+        this.io = io;
+    }
+
+    show = async (req: Request, res: Response) => {
         try {
             const user = await UserModel.findById(req.params.id)
                 .select('-passwordHash -confirmed')
@@ -17,7 +23,7 @@ class UserController {
             })
         }
     }
-    async create(req: Request, res: Response) {
+    create = async (req: Request, res: Response) => {
         try {
             const { email, fullname, avatar, password } = req.body;
 
@@ -57,7 +63,7 @@ class UserController {
             })
         }
     }
-    async delete(req: Request, res: Response) {
+    delete = async (req: Request, res: Response) => {
         try {
             const user = await UserModel.findByIdAndDelete(req.params.id);
             res.status(202).json({
@@ -69,7 +75,7 @@ class UserController {
             })
         }
     }
-    async update(req: Request, res: Response) {
+    update = async (req: Request, res: Response) => {
         try {
             const user = await UserModel.findByIdAndUpdate(
                 req.params.id,
@@ -90,7 +96,7 @@ class UserController {
             })
         }
     }
-    async login(req: Request, res: Response) {
+    login = async (req: Request, res: Response) => {
         try {
             const user = await UserModel.findOne({ email: req.body.email });
 
@@ -130,7 +136,7 @@ class UserController {
             });
         }
     }
-    async getMe(req: Request, res: Response) {
+    getMe = async (req: Request, res: Response) => {
         try {
             const user = await UserModel.findById(req.user);
 
