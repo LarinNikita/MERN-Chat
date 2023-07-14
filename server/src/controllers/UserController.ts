@@ -48,14 +48,11 @@ class UserController {
 
             const { passwordHash, ...userData } = user.toObject();
 
-            res.status(201).json([{
+            res.status(201).json({
                 ...userData,
                 passwordHash,
                 token
-            },
-            {
-                message: 'Поздравляю! Вы зарегистрировалась.'
-            }])
+            })
         } catch (err) {
             console.log(err);
             res.status(500).json({
@@ -122,13 +119,10 @@ class UserController {
 
             const { passwordHash, ...userData } = user.toObject();
 
-            res.status(201).json([{
+            res.status(201).json({
                 ...userData,
                 token
-            },
-            {
-                message: 'Авторизация прошла успешно.'
-            }])
+            })
         } catch (err) {
             console.log(err);
             res.status(500).json({

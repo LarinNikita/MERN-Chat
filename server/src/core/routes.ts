@@ -1,4 +1,5 @@
 import express from "express"
+import cors from 'cors'
 import {Server} from 'socket.io'
 import { DialogCtrl, MessageCtrl, UserCtrl } from "../controllers"
 import { checkAuth, updateLastVisit } from "../middleware"
@@ -11,18 +12,15 @@ const createRoutes = (app: express.Express, io: Server) => {
     const MessageController = new MessageCtrl(io)
 
     app.use(express.json())
+    app.use(cors())
     app.use(checkAuth, updateLastVisit)
 
-    // app.get('/', (_, res) => {
-    //     res.sendFile(__dirname + '/index.html');
-    // });
-
+    app.post('/user/login', login, handlValidation, UserController.login)
     app.post('/user/registration', registration, handlValidation, UserController.create)
     app.get('/user/me', UserController.getMe)
     app.get('/user/:id', UserController.show)
     app.delete('/user/:id', UserController.delete)
     app.patch('/user/:id', registration, handlValidation, UserController.update)
-    app.post('/user/login', login, handlValidation, UserController.login)
 
     app.post('/dialogs', DialogController.create)
     app.delete('/dialogs/:id', DialogController.delete)

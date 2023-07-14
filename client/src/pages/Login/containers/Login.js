@@ -4,21 +4,16 @@ import validateForm from '../../../utils/validate';
 
 export default withFormik({
     mapPropsToValues: () => ({
-        email: '',
-        password: ''
+        email: 'test@test.ru',
+        password: '11111'
     }),
     validate: values => {
         let errors = {};
-
         validateForm({ isAuth: true, values, errors });
-
         return errors;
     },
     handleSubmit: (values, { setSubmitting }) => {
-        setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-        }, 1000);
+        setSubmitting(false)
     },
     displayName: 'Login'
 })(Login);
