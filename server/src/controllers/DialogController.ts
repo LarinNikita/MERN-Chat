@@ -11,17 +11,18 @@ class DialogController {
     index = async (req: Request, res: Response) => {
         try {
             const dialog = await DialogModel
-                .find({ sender: req.user })
+                .find()
+                .or([{ sender: req.user }, { recipient: req.user}])
                 .populate([
                     { path: 'sender', select: 'fullname avatar' },
                     { path: 'recipient', select: 'fullname avatar' },
-                    { path: 'messages', select: 'user' }
+                    { path: 'lastMessages', select: 'user' }
                 ])
                 .exec()
             res.json(dialog)
         } catch (err) {
             res.status(500).json({
-                message: 'Не удалось получить диалог.'
+                message: 'Не удалось получить диалоги'
             })
         }
     }
@@ -38,7 +39,7 @@ class DialogController {
             });
             const message = await messageDoc.save();
 
-            dialog.messages.push(message.toObject());
+            dialog.lastMessages = message._id;
             await dialog.save();
 
             res.json(dialog);

@@ -3,7 +3,7 @@ import { Schema, model, Document } from "mongoose"
 export interface IDialog extends Document {
     sender: Schema.Types.ObjectId;
     recipient: Schema.Types.ObjectId;
-    messages: Schema.Types.ObjectId[];
+    lastMessages: Schema.Types.ObjectId;
 }
 
 const DialogSchema = new Schema(
@@ -18,10 +18,10 @@ const DialogSchema = new Schema(
             ref: 'User',
             required: true
         },
-        messages: [{
+        lastMessages: {
             type: Schema.Types.ObjectId,
             ref: 'Message'
-        }]
+        }
     },
     {
         timestamps: true

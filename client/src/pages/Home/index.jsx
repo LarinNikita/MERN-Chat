@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, selectIsAuth } from '../../redux/slices/user';
 import { Navigate } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { Navigate } from 'react-router-dom';
 import { Dialogs, Message, ChatInput, Messages } from '../../components'
 
 import { Layout, Typography, Badge, Button } from 'antd'
-import { FormOutlined, TeamOutlined, EllipsisOutlined, LogoutOutlined } from '@ant-design/icons';
+import { FormOutlined, TeamOutlined, EllipsisOutlined, LogoutOutlined, ArrowRightOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 
 import './Home.scss'
 
@@ -16,6 +16,8 @@ const { Title, Text } = Typography;
 const Home = () => {
     const isAuth = useSelector(selectIsAuth);
     const dispatch = useDispatch();
+    const [collapsed, setCollapsed] = useState();
+
 
     if (!isAuth) {
         return <Navigate to="/login" />;
@@ -23,15 +25,32 @@ const Home = () => {
 
     const onClickLogout = () => {
         if (window.confirm('Вы действительно хотите выйти?')) {
-          dispatch(logout());
-          window.localStorage.removeItem('token');
+            dispatch(logout());
+            window.localStorage.removeItem('token');
         }
-      };
+    };
 
     return (
 
         <Layout className='wrapper'>
-            <Sider className='sidebar' width={320} >
+            <Sider
+                className='sidebar'
+                width={320}
+                trigger={
+                    <Button
+                        type="text"
+                        icon={collapsed
+                            ? <ArrowRightOutlined />
+                            : <ArrowLeftOutlined />
+                        }
+                    />
+                }
+                breakpoint="md"
+                collapsedWidth="0"
+                onCollapse={() => {
+                    setCollapsed(!collapsed)
+                }}
+            >
                 <Header className='sidebar__header'>
                     <Button
                         className='sidebar__header--btn'

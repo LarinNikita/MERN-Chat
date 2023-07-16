@@ -33,9 +33,9 @@ class MessageController {
             }).populate({ path: 'dialog', select: '-messages' });
             const message = await doc.save()
 
-            DialogModel.updateOne(
+            DialogModel.findOneAndUpdate(
                 { _id: req.body.dialog },
-                { $push: { messages: message._id } }
+                {  lastMessages: message._id }
             ).exec();
 
             res.status(200).json(message);
