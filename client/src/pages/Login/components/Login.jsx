@@ -17,7 +17,8 @@ import '../../../styles/auth.scss'
 
 const Login = props => {
     const isAuth = useSelector(selectIsAuth);
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+
     const {
         values,
         touched,
@@ -36,7 +37,6 @@ const Login = props => {
                 text: 'Авторизация прошла успешно',
                 type: 'success'
             });
-            console.log(data.payload)
             if ('token' in data.payload) {
                 window.localStorage.setItem('token', data.payload.token);
             }
@@ -51,7 +51,7 @@ const Login = props => {
     }
 
     if (isAuth) {
-        return <Navigate to="/register" />;
+        return <Navigate to="/" />;
     }
 
     return (

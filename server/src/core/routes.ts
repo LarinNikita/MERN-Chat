@@ -15,16 +15,17 @@ const createRoutes = (app: express.Express, io: Server) => {
     app.use(cors())
     app.use(checkAuth, updateLastVisit)
 
+    app.get('/user/verify', UserController.verify)
+    app.get('/user/me', UserController.getMe)
     app.post('/user/login', login, handlValidation, UserController.login)
     app.post('/user/registration', registration, handlValidation, UserController.create)
-    app.get('/user/me', UserController.getMe)
     app.get('/user/:id', UserController.show)
     app.delete('/user/:id', UserController.delete)
     app.patch('/user/:id', registration, handlValidation, UserController.update)
 
+    app.get('/dialogs', DialogController.index)
     app.post('/dialogs', DialogController.create)
     app.delete('/dialogs/:id', DialogController.delete)
-    app.get('/dialogs', DialogController.index)
 
     app.post('/messages', MessageController.create)
     app.get('/messages/:id', MessageController.index)

@@ -56,5 +56,9 @@
 
     .box {
         width: 330px;
+        &.w500 {
+            width: 500px;
+        }
     }
+    
 }

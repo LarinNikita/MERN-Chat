@@ -23,6 +23,30 @@ class UserController {
             })
         }
     }
+    verify = async (req: Request, res: Response) => {
+        const hash = req.query.hash;
+
+        if (!hash) {
+            return res.status(400).json({ errors: 'Неккоректный хэш' })
+        };
+
+        const user = await UserModel.findOne({ confirmed_hash: hash })
+
+        if (!user) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'Ссылка не найдена'
+            })
+        };
+
+        user.confirmed = true;
+        await user.save();
+
+        res.json({
+            status: 'success',
+            message: 'Аккаунт успешно поддтвержден!'
+        });
+    }
     create = async (req: Request, res: Response) => {
         try {
             const { email, fullname, avatar, password } = req.body;
@@ -36,8 +60,15 @@ class UserController {
 
             const salt = await bcrypt.genSalt(10);
             const hash = await bcrypt.hash(password, salt);
+            const hash1 = await bcrypt.hash((+new Date() + ""), salt);
 
-            const doc = new UserModel({ email, fullname, avatar, passwordHash: hash });
+            const doc = new UserModel({
+                email,
+                fullname,
+                avatar,
+                passwordHash: hash,
+                confirmed_hash: hash1
+            });
             const user = await doc.save();
 
             const token = jwt.sign(
@@ -46,11 +77,12 @@ class UserController {
                 { expiresIn: process.env.JWT_MAX_AGE, algorithm: 'HS256' }
             );
 
-            const { passwordHash, ...userData } = user.toObject();
+            const { passwordHash, confirmed_hash, ...userData } = user.toObject();
 
             res.status(201).json({
                 ...userData,
                 passwordHash,
+                confirmed_hash,
                 token
             })
         } catch (err) {
@@ -118,6 +150,17 @@ class UserController {
             );
 
             const { passwordHash, ...userData } = user.toObject();
+
+            //Проверка на подтверждённую почту
+            // if (!user.confirmed === true) {
+            //     return res.status(500).json({
+            //         status: 'error',
+            //         message: 'Аккаунт не подтвержден'
+            //     })
+            // }
+            if (!user.confirmed === true) {
+                return res.status(500).render('Аккаунт не подтвержден')
+            }
 
             res.status(201).json({
                 ...userData,

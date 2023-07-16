@@ -4,8 +4,8 @@ import validateForm from '../../../utils/validate';
 
 export default withFormik({
     mapPropsToValues: () => ({
-        email: 'test@test.ru',
-        password: '11111'
+        email: '',
+        password: ''
     }),
     validate: values => {
         let errors = {};

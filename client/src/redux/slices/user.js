@@ -12,7 +12,12 @@ export const fetchMe = createAsyncThunk('user/fetchMe', async () => {
 });
 
 export const fetchRegister = createAsyncThunk('user/fetchRegister', async (params) => {
-    const { data } = await axios.post('/user/register', params);
+    const { data } = await axios.post('/user/registration', params);
+    return data;
+});
+
+export const fetchVerify = createAsyncThunk('user/fetchVerify', async (hash) => {
+    const { data } = await axios.get(`/user/verify?hash=${hash}`);
     return data;
 });
 
