@@ -1,63 +1,58 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import orderBy from 'lodash/orderBy';
-import { DialogItem } from '../';
+
 import { Input, Empty } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
+import { filter } from 'lodash';
 
-import { connect } from 'react-redux'
-import { dialogsActions } from '../../redux/actions'
+import { DialogItem } from '../';
 
 import './Dialogs.scss';
 
-const Dialogs = ({ fetchDialogs, currentDialogId, setCurrentDialogId, items, userId }) => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [filter, setFilter] = useState(Array.from(items));
+const Dialogs = ({ items, isLoading }) => {
+    const userData = useSelector((state) => state.user.data);
 
-    const onChange = value => {
-        setFilter(
-            items.filter(item => item.user.fullname.toLowerCase().indexOf(value.toLowerCase()) >= 0)
-        );
-        setSearchQuery(value);
-    };
-
-    useEffect(() => {
-        if (!items.length) {
-            fetchDialogs();
-        } else {
-            setFilter(items);
-        }
-    }, [items]);
+    const [searchValue, setSearchValue] = useState('');
+    const filteredItems = filter(items, (item) =>
+        item.recipient.fullname.toLowerCase().includes(searchValue.toLowerCase())
+    );
 
     return (
         <div className='dialogs'>
             <Input
                 className='dialogs__search'
                 placeholder='Поиск среди контактов'
-                value={searchQuery}
-                onChange={e => onChange(e.target.value)}
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
                 suffix={<SearchOutlined />}
             />
+
             <div className='dialogs__content'>
-                {filter.length ? (
-                    orderBy(filter, ["created_at"], ["asc"])
-                        .map(item => (
-                            <DialogItem
-                                key={item._id}
-                                isMe={item.user._id === userId}
-                                {...item}
-                                onSelect={setCurrentDialogId}
-                                selected={currentDialogId}
+                {isLoading
+                    ? (
+                        <Empty description="Загрузка..." />
+                    ) : (
+                        filteredItems.length ? (
+                            orderBy(filteredItems, ["created_at"], ["asc"])
+                                .map(item => (
+                                    <DialogItem
+                                        key={item._id}
+                                        isMe={item.recipient._id === userData?._id}
+                                        {...item}
+                                    />
+                                ))
+                        ) : (
+                            <Empty
+                                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                                description="Ничего не найдено"
                             />
-                        ))
-                ) : (
-                    <Empty
-                        image={Empty.PRESENTED_IMAGE_SIMPLE}
-                        description="Ничего не найдено"
-                    />
-                )}
+                        )
+                    )
+                }
             </div>
         </div>
     );
 };
 
-export default connect(({ dialogs }) => dialogs, dialogsActions)(Dialogs);
+export default Dialogs;

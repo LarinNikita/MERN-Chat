@@ -16,7 +16,7 @@ class DialogController {
                 .populate([
                     { path: 'sender', select: 'fullname avatar' },
                     { path: 'recipient', select: 'fullname avatar' },
-                    { path: 'lastMessages', select: 'user' }
+                    { path: 'lastMessages', select: 'user text' }
                 ])
                 .exec()
             res.json(dialog)

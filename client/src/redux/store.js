@@ -10,10 +10,14 @@
 // export default store;
 import { configureStore } from '@reduxjs/toolkit';
 import { userReducer } from './slices/user';
+import { dialogsReducer } from './slices/dialogs';
+import { messagesReducer } from './slices/messages';
 
 const store = configureStore({
   reducer: {
-    user: userReducer
+    user: userReducer,
+    dialogs: dialogsReducer,
+    messages: messagesReducer
   }
 });
 

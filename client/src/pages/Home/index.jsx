@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchDialogs } from '../../redux/slices/dialogs';
 import { logout, selectIsAuth } from '../../redux/slices/user';
 import { Navigate } from 'react-router-dom';
 
@@ -14,8 +15,16 @@ const { Header, Sider, Content } = Layout;
 const { Title, Text } = Typography;
 
 const Home = () => {
-    const isAuth = useSelector(selectIsAuth);
     const dispatch = useDispatch();
+
+    const { dialogs } = useSelector((state) => state.dialogs);
+    const isDialogsLoading = dialogs.status === 'loading';
+
+    useEffect(() => {
+        dispatch(fetchDialogs());
+    }, [dispatch]);
+
+    const isAuth = useSelector(selectIsAuth);
     const [collapsed, setCollapsed] = useState();
 
 
@@ -31,7 +40,6 @@ const Home = () => {
     };
 
     return (
-
         <Layout className='wrapper'>
             <Sider
                 className='sidebar'
@@ -73,7 +81,10 @@ const Home = () => {
                     />
                 </Header>
                 <Content className='sidebar__content'>
-                    {/* <Dialogs /> */}
+                    <Dialogs
+                        items={dialogs.data}
+                        isLoading={isDialogsLoading}
+                    />
                 </Content>
             </Sider>
             <Layout className='chat'>
@@ -91,7 +102,7 @@ const Home = () => {
                     />
                 </Header>
                 <Content className='chat__messages' >
-                    {/* <Messages /> */}
+                    <Messages />
                 </Content>
                 <ChatInput className='chat__input' />
             </Layout>
