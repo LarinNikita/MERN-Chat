@@ -184,8 +184,9 @@ class UserController {
             }
 
             const { passwordHash, ...userData } = user.toObject();
+            const isOnline = user.isOnline;
 
-            res.status(200).json(userData);
+            res.status(200).json({...userData, isOnline});
         } catch (err) {
             console.log(err);
             res.status(500).json({

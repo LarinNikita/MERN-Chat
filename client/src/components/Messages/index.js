@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMessages } from '../../redux/slices/messages';
 
-import { Empty, Spin, message } from 'antd';
+import { Empty, Spin } from 'antd';
 
 import { Message } from '../'
 
@@ -29,16 +29,21 @@ const Messages = () => {
 
     return (
         <div className="messages" ref={messagesRef}>
-            {messages.data && isMessagesLoading ? (
-                <Spin size="large" />
-            ) : messages.data && !isMessagesLoading ? (
-                    messages.data || messages.data.length > 0 ? (messages.data.map(item => (<Message key={item._id} {...item} />))
-                ) : (
-                    <Empty description="Нет сообщений" />
-                )
-            ) : (
-                <Empty description="Откройте диалог" />
+
+            {!selectedDialogId && <Empty description="Откройте диалог" />}
+
+            {selectedDialogId && isMessagesLoading && <Spin size="large" />}
+
+            {selectedDialogId && !isMessagesLoading && messages.data.length === 0 && (
+                <Empty description="Нет сообщений" />
             )}
+
+            {selectedDialogId && !isMessagesLoading && messages.data.length > 0 && (
+                messages.data.map((item) =>
+                    <Message key={item._id} {...item} />
+                )
+            )}
+
         </div>
     )
 };

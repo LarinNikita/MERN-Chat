@@ -1,7 +1,7 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchRegister, selectIsAuth } from '../../../redux/slices/user'
-import { Link, Navigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { fetchRegister } from '../../../redux/slices/user'
+import { Link } from 'react-router-dom'
 
 import { Form, Input } from 'antd'
 import {
@@ -12,15 +12,12 @@ import {
     EyeInvisibleOutlined
 } from '@ant-design/icons'
 
-import { Box, Button, CheckEmail } from '../../../components'
+import { Box, Button } from '../../../components'
 import { notification, validateFields } from '../../../utils/helpers'
 
 import '../../../styles/auth.scss'
 
-const success = false;
-
 const Registration = props => {
-    const isAuth = useSelector(selectIsAuth);
     const dispatch = useDispatch();
 
     const {
@@ -54,21 +51,16 @@ const Registration = props => {
         }
     }
 
-    if (isAuth) {
-        return <Navigate to="/" />;
-    }
-
     return (
         <section className="auth">
             <div className="auth__content">
-                {!success ? (
+                {
                     <>
                         <div className="auth__top">
                             <h2>Регистрация</h2>
                             <p>Для входа в чат, вам нужно зарегистрироваться</p>
                         </div>
                         <Box>
-
                             <Form onSubmit={handleSubmit}>
                                 <Form.Item
                                     validateStatus={validateFields("email", touched, errors)}
@@ -153,9 +145,7 @@ const Registration = props => {
                             </Form>
                         </Box>
                     </>
-                ) : (
-                    <></>
-                )}
+                }
             </div>
         </section >
     )

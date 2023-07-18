@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { axios } from '../../axios';
 
-export const fetchLogin = createAsyncThunk('user/fetchLogin', async (params) => {
-    const { data } = await axios.post('/user/login', params);
+export const fetchMe = createAsyncThunk('user/fetchMe', async () => {
+    const { data } = await axios.get('/user/me');
     return data;
 });
 
-export const fetchMe = createAsyncThunk('user/fetchMe', async () => {
-    const { data } = await axios.get('/user/me');
+export const fetchLogin = createAsyncThunk('user/fetchLogin', async (params) => {
+    const { data } = await axios.post('/user/login', params);
     return data;
 });
 

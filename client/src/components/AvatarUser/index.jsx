@@ -28,8 +28,6 @@ const AvatarUser = ({ user }) => {
             />
         )
     }
-
-
 }
 
 export default AvatarUser

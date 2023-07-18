@@ -46,7 +46,7 @@ const DialogItem = ({ _id, recipient, createdAt, lastMessages, unread, isMe }) =
                     color='green'
                     style={{ padding: 5, border: '2.3px solid #fff' }}
                     offset={[-7, 37]}
-                // dot={user.online}
+                dot={lastMessages.user.isOnline}
                 >
                     <AvatarUser user={recipient} />
                 </Badge>
@@ -57,7 +57,7 @@ const DialogItem = ({ _id, recipient, createdAt, lastMessages, unread, isMe }) =
                         {recipient.fullname}
                     </Text>
                     <Text type="secondary">
-                        {getMessageTime(new Date(createdAt))}
+                        {getMessageTime(new Date(lastMessages.createdAt))}
                     </Text>
                 </div>
                 <div className='dialogs__item-info-bottom'>
@@ -66,7 +66,7 @@ const DialogItem = ({ _id, recipient, createdAt, lastMessages, unread, isMe }) =
                     </Text>
                     {(unread > 0)
                         ? (<Badge color='#fd7967' style={{ fontSize: 12 }} count={unread} />)
-                        : (isMe && <Readed isMe={true} isReaded={true} />)
+                        : (isMe && <Readed isMe={isMe} isReaded={true} />)
                     }
 
                 </div>

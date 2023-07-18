@@ -12,11 +12,11 @@ class DialogController {
         try {
             const dialog = await DialogModel
                 .find()
-                .or([{ sender: req.user }, { recipient: req.user}])
+                .or([{ sender: req.user }, { recipient: req.user }])
                 .populate([
                     { path: 'sender', select: 'fullname avatar' },
                     { path: 'recipient', select: 'fullname avatar' },
-                    { path: 'lastMessages', select: 'user text' }
+                    { path: 'lastMessages', populate: { path: 'user' } }
                 ])
                 .exec()
             res.json(dialog)

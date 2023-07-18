@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { fetchMe } from './redux/slices/user'
 
@@ -17,10 +17,15 @@ const App = () => {
 
   return (
     <Routes>
-      <Route path='/' element={<Home />} />
+
+      <Route index element={<Home />} />
+
       <Route path='/login' element={<Login />} />
       <Route path='/register' element={<Registration />} />
       <Route path='/register/verify' element={<CheckEmail />} />
+
+      <Route path='*' element={<Navigate to="/login" />} />
+
     </Routes>
   );
 }

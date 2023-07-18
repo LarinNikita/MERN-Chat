@@ -1,5 +1,8 @@
 import React from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchLogin, selectIsAuth } from '../../../redux/slices/user'
+
 import { Form, Input } from 'antd'
 import {
     MailOutlined,
@@ -7,17 +10,16 @@ import {
     EyeTwoTone,
     EyeInvisibleOutlined
 } from '@ant-design/icons'
+
 import { Box, Button } from '../../../components'
 import { notification, validateFields } from '../../../utils/helpers'
-
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchLogin, selectIsAuth } from '../../../redux/slices/user'
 
 import '../../../styles/auth.scss'
 
 const Login = props => {
-    const isAuth = useSelector(selectIsAuth);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const isAuth = useSelector(selectIsAuth);
 
     const {
         values,
@@ -41,6 +43,7 @@ const Login = props => {
                 window.localStorage.setItem('token', data.payload.token);
             }
             handleSubmit(values);
+            navigate('/')
         } else {
             notification({
                 title: 'Ошибка авторизация',
@@ -51,7 +54,7 @@ const Login = props => {
     }
 
     if (isAuth) {
-        return <Navigate to="/" />;
+        return <Navigate to='/'/>
     }
 
     return (

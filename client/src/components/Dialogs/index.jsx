@@ -18,6 +18,8 @@ const Dialogs = ({ items, isLoading }) => {
         item.recipient.fullname.toLowerCase().includes(searchValue.toLowerCase())
     );
 
+    console.log(items)
+
     return (
         <div className='dialogs'>
             <Input

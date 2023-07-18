@@ -4,7 +4,7 @@ import { fetchDialogs } from '../../redux/slices/dialogs';
 import { logout, selectIsAuth } from '../../redux/slices/user';
 import { Navigate } from 'react-router-dom';
 
-import { Dialogs, Message, ChatInput, Messages } from '../../components'
+import { Dialogs, ChatInput, Messages } from '../../components'
 
 import { Layout, Typography, Badge, Button } from 'antd'
 import { FormOutlined, TeamOutlined, EllipsisOutlined, LogoutOutlined, ArrowRightOutlined, ArrowLeftOutlined } from '@ant-design/icons';
@@ -15,6 +15,7 @@ const { Header, Sider, Content } = Layout;
 const { Title, Text } = Typography;
 
 const Home = () => {
+    const isAuth = useSelector(selectIsAuth);
     const dispatch = useDispatch();
 
     const { dialogs } = useSelector((state) => state.dialogs);
@@ -24,13 +25,7 @@ const Home = () => {
         dispatch(fetchDialogs());
     }, [dispatch]);
 
-    const isAuth = useSelector(selectIsAuth);
     const [collapsed, setCollapsed] = useState();
-
-
-    if (!isAuth) {
-        return <Navigate to="/login" />;
-    }
 
     const onClickLogout = () => {
         if (window.confirm('Вы действительно хотите выйти?')) {
@@ -38,6 +33,10 @@ const Home = () => {
             window.localStorage.removeItem('token');
         }
     };
+
+    if (!window.localStorage.getItem('token') && !isAuth) {
+        return <Navigate to="/login" />;
+    }
 
     return (
         <Layout className='wrapper'>

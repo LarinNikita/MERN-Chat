@@ -10,6 +10,7 @@ import { Button } from 'antd'
 import { CaretUpOutlined, PauseOutlined } from '@ant-design/icons'
 
 import { convertCurrentTime } from '../../utils/helpers'
+import { useSelector } from 'react-redux'
 
 // import WaveSurfer from 'https://unpkg.com/wavesurfer.js@beta'
 
@@ -23,6 +24,7 @@ import { convertCurrentTime } from '../../utils/helpers'
 // wavesurfer.on('interaction', () => {
 //   wavesurfer.play()
 // })
+
 
 const MessageAudio = ({ audioSrc }) => {
     const [isPlay, setIsPlay] = React.useState(false);
@@ -89,17 +91,18 @@ const Message = ({
     user,
     text,
     // date,
-    created_at,
+    createdAt,
     isMe,
     isReaded,
     attachments,
     isTyping,
     audio
 }) => {
+    const userData = useSelector((state) => state.user.data);
     return (
         <div
             className={classNames('message', {
-                'message--isme': isMe,
+                'message--isme': userData._id === user._id,
                 'message--is-typing': isTyping,
                 'message--image': attachments && attachments.length === 1,
                 'message--is-audio': audio,
@@ -136,8 +139,8 @@ const Message = ({
                         }
                     </div>
                 }
-                {created_at && <span className="message__date">
-                    <Time date={new Date(created_at)} />
+                {createdAt && <span className="message__date">
+                    <Time date={new Date(createdAt)} />
                 </span>}
             </div>
 
