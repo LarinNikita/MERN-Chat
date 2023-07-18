@@ -1,46 +1,51 @@
 import React, { useRef, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchMessages } from '../../redux/slices/messages';
+
 import { Empty, Spin } from 'antd';
+
 import { Message } from '../'
-import { connect } from 'react-redux';
-import { messagesActions } from '../../redux/actions';
 
 import './Messages.scss';
 
-const Messages = ({ isLoading, currentDialogId, fetchMessages, items }) => {
+const Messages = () => {
+    const dispatch = useDispatch();
 
     const messagesRef = useRef(null);
 
+    const selectedDialogId = useSelector((state) => state.dialogs.currentDialogId);
+    const { messages } = useSelector((state) => state.messages);
+    const isMessagesLoading = messages.status === 'loading';
+
     useEffect(() => {
-        if (currentDialogId) {
-            fetchMessages(currentDialogId);
+        if (selectedDialogId) {
+            dispatch(fetchMessages(selectedDialogId));
         }
-    }, [currentDialogId]);
+    }, [dispatch, selectedDialogId]);
 
     useEffect(() => {
         messagesRef.current.scrollTo(0, messagesRef.current.scrollHeight);
-    }, [items])
+    }, [messages.data])
 
     return (
         <div className="messages" ref={messagesRef}>
-            {isLoading ? (
-                <Spin size="large" />
-            ) : items && !isLoading ? (
-                items.length > 0 ? (items.map(item => (<Message key={item._id} {...item} />))
-                ) : (
-                    <Empty description="Нет сообщений" />
-                )
-            ) : (
-                <Empty description="Откройте диалог" />
+
+            {!selectedDialogId && <Empty description="Откройте диалог" />}
+
+            {selectedDialogId && isMessagesLoading && <Spin size="large" />}
+
+            {selectedDialogId && !isMessagesLoading && messages.data.length === 0 && (
+                <Empty description="Нет сообщений" />
             )}
+
+            {selectedDialogId && !isMessagesLoading && messages.data.length > 0 && (
+                messages.data.map((item) =>
+                    <Message key={item._id} {...item} />
+                )
+            )}
+
         </div>
     )
 };
 
-export default connect(
-    ({ dialogs, messages }) => ({
-        currentDialogId: dialogs.currentDialogId,
-        items: messages.items,
-        isLoading: messages.isLoading
-    }),
-    messagesActions
-)(Messages);
+export default Messages;

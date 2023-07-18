@@ -8,6 +8,7 @@ body,
 .wrapper {
     color: #202002;
     font-size: 14px;
+    height: 100%;
 }
 
 body {
@@ -43,4 +44,18 @@ body {
 
 .ant-btn-link {
     color: #8c8c8c;
+}
+
+.ant-layout-sider-zero-width-trigger {
+    position: absolute;
+    top: 15px !important;
+    color: #202002 !important;
+    background: transparent !important;
+    z-index: 10 !important;
+    border-start-end-radius: 0 !important;
+    border-end-end-radius: 0 !important;
+}
+
+.ant-layout-sider {
+    transition: all 0s,background 0s !important;
 }

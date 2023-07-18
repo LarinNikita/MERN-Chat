@@ -1,19 +1,25 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchLogin, selectIsAuth } from '../../../redux/slices/user'
+
 import { Form, Input } from 'antd'
 import {
     MailOutlined,
     LockOutlined,
-    UserOutlined,
     EyeTwoTone,
     EyeInvisibleOutlined
 } from '@ant-design/icons'
+
 import { Box, Button } from '../../../components'
-import { validateFields } from '../../../utils/helpers'
+import { notification, validateFields } from '../../../utils/helpers'
 
 import '../../../styles/auth.scss'
 
 const Login = props => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const isAuth = useSelector(selectIsAuth);
 
     const {
         values,
@@ -24,6 +30,33 @@ const Login = props => {
         handleSubmit,
     } = props;
 
+    const handleFormSubmit = async (values) => {
+        const data = await dispatch(fetchLogin(values));
+
+        if (data.payload) {
+            notification({
+                title: 'Поздравляю',
+                text: 'Авторизация прошла успешно',
+                type: 'success'
+            });
+            if ('token' in data.payload) {
+                window.localStorage.setItem('token', data.payload.token);
+            }
+            handleSubmit(values);
+            navigate('/')
+        } else {
+            notification({
+                title: 'Ошибка авторизация',
+                text: 'Неверный логин или пароль',
+                type: 'error'
+            });
+        }
+    }
+
+    if (isAuth) {
+        return <Navigate to='/'/>
+    }
+
     return (
         <section className='auth'>
             <div className="auth__content">
@@ -33,23 +66,6 @@ const Login = props => {
                 </div>
                 <Box>
                     <Form onSubmit={handleSubmit}>
-                        {/* <Form.Item
-                            name="username"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input your Username!',
-                                },
-                            ]}
-                            hasFeedback
-                            validateStatus="success"
-                        >
-                            <Input
-                                size="large"
-                                prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                placeholder="Username"
-                            />
-                        </Form.Item> */}
                         <Form.Item
                             validateStatus={validateFields("email", touched, errors)}
                             help={!touched.email ? "" : errors.email}
@@ -66,8 +82,8 @@ const Login = props => {
                             />
                         </Form.Item>
                         <Form.Item
-                             validateStatus={validateFields("password", touched, errors)}
-                             help={!touched.password ? "" : errors.password}
+                            validateStatus={validateFields("password", touched, errors)}
+                            help={!touched.password ? "" : errors.password}
                             hasFeedback
                         >
                             <Input.Password
@@ -85,7 +101,11 @@ const Login = props => {
                             />
                         </Form.Item>
                         <Form.Item>
-                            <Button onClick={handleSubmit} type="primary" size='large'>
+                            <Button
+                                onClick={() => handleFormSubmit(values)}
+                                type="primary"
+                                size='large'
+                            >
                                 Войти в аккаунт
                             </Button>
                         </Form.Item>

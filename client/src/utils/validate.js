@@ -10,13 +10,26 @@ export default ({ isAuth, values, errors }) => {
                 errors.email = 'Неверная почта';
             }
         },
+        fullname: (value) => {
+            if (!isAuth && !value) {
+                errors.fullname = 'Укажите свое имя и фамилию';
+            }
+        },
         password: (value) => {
             if (!value) {
                 errors.password = 'Введите пароль';
-            } else if (
-                !/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/i.test(value)
+            } else if (!isAuth &&
+                !/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/i.test(value)
             ) {
-                errors.password = isAuth ? 'Неверный пароль' : 'Слишком лёкгий пароль';
+                errors.password = 'Слишком лёкгий пароль';
+            }
+        },
+        password_confirm: (value) => {
+            if (!value) {
+                errors.password_confirm = 'Введите пароль';
+            }
+            if (!isAuth && value !== values.password) {
+                errors.password_confirm = 'Пароли не совпадают';
             }
         },
     }

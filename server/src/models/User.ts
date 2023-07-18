@@ -1,13 +1,15 @@
 import { Schema, model, Document } from "mongoose"
+import { differenceInMinutes } from "date-fns";
 
 export interface IUser extends Document {
     email: string;
     fullname: string;
     passwordHash: string;
-    confirmed?: boolean;
+    confirmed: boolean;
     avatar?: string;
     confirmed_hash?: string;
     last_visit: Date;
+    isOnline: boolean;
 }
 
 const UserSchema = new Schema(
@@ -40,5 +42,13 @@ const UserSchema = new Schema(
         timestamps: true
     }
 )
+
+UserSchema.virtual('isOnline').get(function(this: IUser) {
+    return differenceInMinutes(new Date(), this.last_visit) < 5;
+})
+
+UserSchema.set('toJSON', {
+    virtuals: true
+})
 
 export default model<IUser>('User', UserSchema)
