@@ -15,10 +15,9 @@ const Dialogs = ({ items, isLoading }) => {
 
     const [searchValue, setSearchValue] = useState('');
     const filteredItems = filter(items, (item) =>
+        item.sender.fullname.toLowerCase().includes(searchValue.toLowerCase()) ||
         item.recipient.fullname.toLowerCase().includes(searchValue.toLowerCase())
     );
-
-    console.log(items)
 
     return (
         <div className='dialogs'>
@@ -40,7 +39,7 @@ const Dialogs = ({ items, isLoading }) => {
                                 .map(item => (
                                     <DialogItem
                                         key={item._id}
-                                        isMe={item.recipient._id === userData?._id}
+                                        isMe={item.sender._id === userData?._id}
                                         {...item}
                                     />
                                 ))

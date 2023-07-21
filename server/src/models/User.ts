@@ -39,16 +39,14 @@ const UserSchema = new Schema(
         }
     },
     {
-        timestamps: true
+        timestamps: true,
+        toObject: { virtuals: true },
+        toJSON: { virtuals: true }
     }
 )
 
-UserSchema.virtual('isOnline').get(function(this: IUser) {
-    return differenceInMinutes(new Date(), this.last_visit) < 5;
-})
-
-UserSchema.set('toJSON', {
-    virtuals: true
+UserSchema.virtual('isOnline').get(function (this: IUser) {
+    return differenceInMinutes(new Date(), this.last_visit) < 0.5;
 })
 
 export default model<IUser>('User', UserSchema)

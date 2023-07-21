@@ -14,8 +14,8 @@ class DialogController {
                 .find()
                 .or([{ sender: req.user }, { recipient: req.user }])
                 .populate([
-                    { path: 'sender', select: 'fullname avatar' },
-                    { path: 'recipient', select: 'fullname avatar' },
+                    { path: 'sender' },
+                    { path: 'recipient'},
                     { path: 'lastMessages', populate: { path: 'user' } }
                 ])
                 .exec()
@@ -28,21 +28,29 @@ class DialogController {
     }
     create = async (req: Request, res: Response) => {
         try {
-            const { sender, recipient } = req.body;
-            const dialogDoc = new DialogModel({ sender, recipient });
+            // const { sender, recipient } = req.body;
+            const postData = {
+                sender: req.user,
+                recipient: req.body.recipient
+            }
+            const dialogDoc = new DialogModel(postData);
             const dialog = await dialogDoc.save();
 
             const messageDoc = new MessageModel({
                 text: req.body.text,
-                user: req.body.sender,
+                user: req.user,
                 dialog: dialog._id
             });
             const message = await messageDoc.save();
 
-            dialog.lastMessages = message._id;
+            dialog.lastMessages = message.id;
             await dialog.save();
 
             res.json(dialog);
+            this.io.emit("SERVER:DIALOG_CREATED", {
+                ...postData,
+                dialog: dialog._id
+            });
         } catch (err) {
             res.status(500).json({
                 message: 'Не удалось создать диалог.'

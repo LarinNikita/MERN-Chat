@@ -21,6 +21,7 @@ body {
     --scrollbar-size: 4px;
     /* плашка-бегунок, фон */
     scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
+    scrollbar-width: thin !important;
 }
 
 *::-webkit-scrollbar {

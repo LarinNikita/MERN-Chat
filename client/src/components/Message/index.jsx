@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-import './Message.scss'
 import { Time, Readed, AvatarUser } from '../'
 
 import wave from '../../assets/icons/wave.svg'
@@ -10,7 +9,7 @@ import { Button } from 'antd'
 import { CaretUpOutlined, PauseOutlined } from '@ant-design/icons'
 
 import { convertCurrentTime } from '../../utils/helpers'
-import { useSelector } from 'react-redux'
+import './Message.scss'
 
 // import WaveSurfer from 'https://unpkg.com/wavesurfer.js@beta'
 
@@ -90,7 +89,7 @@ const Message = ({
     avatar,
     user,
     text,
-    // date,
+    date,
     createdAt,
     isMe,
     isReaded,
@@ -98,11 +97,10 @@ const Message = ({
     isTyping,
     audio
 }) => {
-    const userData = useSelector((state) => state.user.data);
     return (
         <div
             className={classNames('message', {
-                'message--isme': userData._id === user._id,
+                'message--isme': isMe,
                 'message--is-typing': isTyping,
                 'message--image': attachments && attachments.length === 1,
                 'message--is-audio': audio,

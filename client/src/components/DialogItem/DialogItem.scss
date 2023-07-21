@@ -3,6 +3,7 @@
     // width: 300px;
     // margin-bottom: 20px;
     padding: 10px 20px;
+    height: 66px;
     cursor: pointer;
 
     &--selected,
@@ -29,6 +30,8 @@
                 text-overflow: ellipsis;
                 overflow: hidden;
                 max-width: 200px;
+                display: inline-block;
+                height: 25px;
             }
         }
     }

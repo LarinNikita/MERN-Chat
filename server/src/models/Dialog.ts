@@ -1,4 +1,5 @@
 import { Schema, model, Document } from "mongoose"
+import { UserModel } from "../models";
 
 export interface IDialog extends Document {
     sender: Schema.Types.ObjectId;

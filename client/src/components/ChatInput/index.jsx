@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { SmileOutlined, PaperClipOutlined, AudioOutlined, SendOutlined, DownloadOutlined } from '@ant-design/icons'
 import { Button, Input, Upload, Modal, Empty } from 'antd'
@@ -6,13 +7,27 @@ import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 
 import './ChatInput.scss'
+import { sendMessages } from '../../redux/slices/messages'
 
 const ChatInput = () => {
+    const dispatch = useDispatch();
+    const selectedDialogId = useSelector((state) => state.dialogs.currentDialogId);
 
-    const [value, setValuue] = React.useState('');
+    const [value, setValue] = React.useState('');
     const [visible, setVisible] = useState(false);
     const [visibleEmoji, setVisibleEmoji] = useState(false);
     const [fileList, setFileList] = useState([]);
+
+    const onSendMessage = (selectedDialogId, value) => {
+        dispatch(sendMessages({dialog: selectedDialogId, text: value}))
+    };
+
+    const handleSendMessage = (e) => {
+        if (e.key === 'Enter') {
+            onSendMessage(selectedDialogId, value);
+            setValue('');
+        }
+    };
 
     const handleUpload = () => {
         // Здесь можно добавить логику для загрузки файлов на сервер
@@ -75,7 +90,9 @@ const ChatInput = () => {
                     />
                 }
                 placeholder='Введите текст сообщения...'
-                onChange={(e) => setValuue(e.target.value)}
+                onChange={(e) => setValue(e.target.value)}
+                value={value}
+                onKeyUp={handleSendMessage}
                 suffix={
                     <>
                         <Button type="link" onClick={() => setVisible(true)} icon={<PaperClipOutlined />} />

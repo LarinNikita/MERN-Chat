@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { axios } from '../../axios';
+import { axios } from '../../core';
 
 export const fetchDialogs = createAsyncThunk('user/fetchDialogs', async () => {
     const { data } = await axios.get('/dialogs');
@@ -11,7 +11,7 @@ const initialState = {
         data: [],
         status: 'loading'
     },
-    currentDialogId: null,
+    currentDialogId: null
 };
 
 const dialogsSlice = createSlice({

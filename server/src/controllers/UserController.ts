@@ -77,12 +77,10 @@ class UserController {
                 { expiresIn: process.env.JWT_MAX_AGE, algorithm: 'HS256' }
             );
 
-            const { passwordHash, confirmed_hash, ...userData } = user.toObject();
+            const { passwordHash, confirmed, confirmed_hash, ...userData } = user.toObject();
 
             res.status(201).json({
                 ...userData,
-                passwordHash,
-                confirmed_hash,
                 token
             })
         } catch (err) {
@@ -149,15 +147,8 @@ class UserController {
                 { expiresIn: process.env.JWT_MAX_AGE, algorithm: 'HS256' }
             );
 
-            const { passwordHash, ...userData } = user.toObject();
+            const { passwordHash, confirmed, confirmed_hash, ...userData } = user.toObject();
 
-            //Проверка на подтверждённую почту
-            // if (!user.confirmed === true) {
-            //     return res.status(500).json({
-            //         status: 'error',
-            //         message: 'Аккаунт не подтвержден'
-            //     })
-            // }
             if (!user.confirmed === true) {
                 return res.status(500).render('Аккаунт не подтвержден')
             }
@@ -183,10 +174,9 @@ class UserController {
                 })
             }
 
-            const { passwordHash, ...userData } = user.toObject();
-            const isOnline = user.isOnline;
+            const { passwordHash, confirmed, confirmed_hash, ...userData } = user.toObject();
 
-            res.status(200).json({...userData, isOnline});
+            res.status(200).json({ ...userData });
         } catch (err) {
             console.log(err);
             res.status(500).json({

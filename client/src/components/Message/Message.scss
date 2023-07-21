@@ -20,14 +20,17 @@
 
     &__content {
         max-width: 440px;
+        display: flex;
+        flex-direction: column;
     }
 
     &__bubble {
         background-color: $blue;
         box-shadow: 0 5px 5px rgba(54, 166, 255, 0.2);
         border-radius: 12px 12px 12px 0;
-        padding: 15px;
+        padding: 10px 15px;
         margin-bottom: 8px;
+        align-self: flex-start;
     }
 
     &__text {
@@ -87,6 +90,7 @@
             border: 1px solid #ececec;
             box-shadow: 0 4px 4px rgba(0, 0, 0, 0.02);
             border-radius: 12px 12px 0 12px;
+            align-self: flex-end;
 
             #{$self}__text {
                 color: $black;
@@ -139,11 +143,13 @@
         audio {
             display: none;
         }
+
         #{$self}__bubble {
             width: 280px;
             position: relative;
             overflow: hidden;
         }
+
         #{$self}__audio {
             &-progress {
                 position: absolute;
@@ -171,8 +177,7 @@
                 }
             }
 
-            &-wave {
-            }
+            &-wave {}
 
             &-duration {
                 color: #fff;
