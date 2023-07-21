@@ -25,21 +25,20 @@ class MessageController {
     }
     create = async (req: Request, res: Response) => {
         try {
-            const userId = req.user;
             const doc = await new MessageModel({
-                user: userId,
+                user: req.user,
                 dialog: req.body.dialog,
                 text: req.body.text
-            }).populate({ path: 'dialog', select: '-messages' });
+            }).populate('dialog user');
             const message = await doc.save()
 
             DialogModel.findOneAndUpdate(
                 { _id: req.body.dialog },
-                {  lastMessages: message._id }
+                { lastMessages: message._id }
             ).exec();
 
             res.status(200).json(message);
-            this.io.emit("SERVER:NEW_MESSAGE", message);
+            this.io.emit('SERVER:MESSAGE_CREATED', message);
         } catch (err) {
             res.status(500).json({
                 message: 'Не удалось добавить сообщение.'

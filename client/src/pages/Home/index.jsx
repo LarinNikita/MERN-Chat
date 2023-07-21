@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { socket } from '../../core';
 import { fetchDialogs } from '../../redux/slices/dialogs';
 import { logout, selectIsAuth } from '../../redux/slices/user';
 import { Navigate } from 'react-router-dom';
 
-import { Dialogs, ChatInput, Messages } from '../../components'
+import { Dialogs, Chat } from '../../components'
 
-import { Layout, Typography, Badge, Button } from 'antd'
-import { FormOutlined, TeamOutlined, EllipsisOutlined, LogoutOutlined, ArrowRightOutlined, ArrowLeftOutlined } from '@ant-design/icons';
+import { Layout, Typography, Button, Empty } from 'antd'
+import { FormOutlined, TeamOutlined, LogoutOutlined, ArrowRightOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 
 import './Home.scss'
 
 const { Header, Sider, Content } = Layout;
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 const Home = () => {
     const isAuth = useSelector(selectIsAuth);
@@ -21,9 +22,23 @@ const Home = () => {
     const { dialogs } = useSelector((state) => state.dialogs);
     const isDialogsLoading = dialogs.status === 'loading';
 
-    useEffect(() => {
+    const onNewDialog = () => {
         dispatch(fetchDialogs());
+    }
+
+    useEffect(() => {
+        if (dialogs.data) {
+            dispatch(fetchDialogs());
+        }
+
+        socket.on('SERVER:DIALOG_CREATED', onNewDialog);
+
+        return () => {
+            socket.removeListener('SERVER:DIALOG_CREATED', onNewDialog);
+        }
     }, [dispatch]);
+
+    const selectedDialogId = useSelector((state) => state.dialogs.currentDialogId);
 
     const [collapsed, setCollapsed] = useState();
 
@@ -87,23 +102,14 @@ const Home = () => {
                 </Content>
             </Sider>
             <Layout className='chat'>
-                <Header className='chat__header'>
-                    <div />
-                    <div className='chat__header--user'>
-                        <Text strong >Имя пользователя</Text>
-                        <Badge status="success" text={<Text type='secondary'>Онлайн</Text>} />
-                        {/* <Badge status="default" text={<Text type='secondary'>Офлайн</Text>} /> */}
-                    </div>
-                    <Button
-                        type="link"
-                        shape="circle"
-                        icon={<EllipsisOutlined style={{ fontSize: '22px' }} />}
-                    />
-                </Header>
-                <Content className='chat__messages' >
-                    <Messages />
-                </Content>
-                <ChatInput className='chat__input' />
+                {selectedDialogId ? (
+                    <Chat items={dialogs.data} />
+                ) : (
+                    <Content className='messages' >
+                        <Empty description='Выберите, кому хотели бы написать' />
+                    </Content>
+                )}
+
             </Layout>
         </Layout>
 
