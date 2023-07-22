@@ -2,12 +2,12 @@ import { Avatar } from 'antd'
 import React from 'react'
 import { generateAvatar } from '../../utils/helpers'
 
-const AvatarUser = ({ user }) => {
+const AvatarUser = ({ user, size }) => {
 
     if (user.avatar) {
         return (
             <Avatar
-                size={42}
+                size={size}
                 src={user.avatar}
             />
         )
@@ -16,7 +16,7 @@ const AvatarUser = ({ user }) => {
         const firstCharName = user.fullname.charAt(0).toUpperCase();;
         return (
             <Avatar
-                size={42}
+                size={size}
                 style={{
                     display: 'flex',
                     justifyContent: 'center',

@@ -19,6 +19,7 @@ const createRoutes = (app: express.Express, io: Server) => {
     app.get('/user/me', UserController.getMe)
     app.post('/user/login', login, handlValidation, UserController.login)
     app.post('/user/registration', registration, handlValidation, UserController.create)
+    app.get('/user/search', UserController.searchUsers)
     app.get('/user/:id', UserController.show)
     app.delete('/user/:id', UserController.delete)
     app.patch('/user/:id', registration, handlValidation, UserController.update)

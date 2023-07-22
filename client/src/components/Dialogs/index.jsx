@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import orderBy from 'lodash/orderBy';
+import { filter, orderBy } from 'lodash';
 
 import { Input, Empty } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-import { filter } from 'lodash';
 
 import { DialogItem } from '../';
 
@@ -14,6 +13,7 @@ const Dialogs = ({ items, isLoading }) => {
     const userData = useSelector((state) => state.user.data);
 
     const [searchValue, setSearchValue] = useState('');
+    
     const filteredItems = filter(items, (item) =>
         item.sender.fullname.toLowerCase().includes(searchValue.toLowerCase()) ||
         item.recipient.fullname.toLowerCase().includes(searchValue.toLowerCase())

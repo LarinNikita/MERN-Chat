@@ -9,6 +9,8 @@ import isToday from 'date-fns/isToday'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentDialogId } from '../../redux/slices/dialogs'
 
+import Star from '../../assets/star.png'
+
 import './DialogItem.scss'
 
 const { Text } = Typography;
@@ -25,7 +27,7 @@ const getMessageTime = createdAt => {
     }
 };
 
-const DialogItem = ({ _id, sender, recipient, lastMessages, unread, isMe}) => {
+const DialogItem = ({ _id, sender, recipient, lastMessages, unread, isMe }) => {
     const dispatch = useDispatch();
     const userData = useSelector((state) => state.user.data);
 
@@ -34,6 +36,21 @@ const DialogItem = ({ _id, sender, recipient, lastMessages, unread, isMe}) => {
     }
 
     const selectedDialogId = useSelector((state) => state.dialogs.currentDialogId);
+
+    let user = (
+        sender._id === userData._id
+            ? recipient
+            : sender
+    ) || {};
+
+    if (sender._id === recipient._id) {
+        user = {
+            _id: 'h894m61LU3JBsooW',
+            fullname: 'Избранное',
+            isOnline: false,
+            avatar: Star
+        };
+    }
 
     return (
         <div
@@ -47,15 +64,15 @@ const DialogItem = ({ _id, sender, recipient, lastMessages, unread, isMe}) => {
                     color='green'
                     style={{ padding: 5, border: '2.3px solid #fff' }}
                     offset={[-7, 37]}
-                    dot={userData._id === sender._id ? recipient.isOnline : sender.isOnline}
+                    dot={user.isOnline}
                 >
-                    <AvatarUser user={userData._id === sender._id ? recipient : sender} />
+                    <AvatarUser user={user} size={42} />
                 </Badge>
             </div>
             <div className="dialogs__item-info">
                 <div className='dialogs__item-info-top'>
                     <Text strong >
-                        {userData._id === sender._id ? recipient.fullname : sender.fullname}
+                        {user.fullname}
                     </Text>
                     <Text type="secondary">
                         {getMessageTime(new Date(lastMessages.createdAt))}
@@ -63,14 +80,20 @@ const DialogItem = ({ _id, sender, recipient, lastMessages, unread, isMe}) => {
                 </div>
                 <div className='dialogs__item-info-bottom'>
                     <Text type="secondary">
-                        {userData._id === lastMessages.user._id ? 'Вы: ' : null}
+                        {sender._id === recipient._id ? (
+                            null
+                        ) : (
+                            userData._id === lastMessages.user._id ? 'Вы: ' : null
+                        )}
                         {lastMessages?.text}
                     </Text>
-                    {(unread > 0)
-                        ? (<Badge color='#fd7967' style={{ fontSize: 12 }} count={unread} />)
-                        : (<Readed isMe={isMe} isReaded={false} />)
-                    }
-
+                    {sender._id === recipient._id ? (
+                        null
+                    ) : (
+                        (unread > 0)
+                            ? (<Badge color='#fd7967' style={{ fontSize: 12 }} count={unread} />)
+                            : (<Readed isMe={isMe} isReaded={false} />)
+                    )}
                 </div>
             </div>
         </div>

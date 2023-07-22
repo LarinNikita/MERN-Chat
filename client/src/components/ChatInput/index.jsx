@@ -13,7 +13,7 @@ const ChatInput = () => {
     const dispatch = useDispatch();
     const selectedDialogId = useSelector((state) => state.dialogs.currentDialogId);
 
-    const [value, setValue] = React.useState('');
+    const [value, setValue] = useState('');
     const [visible, setVisible] = useState(false);
     const [visibleEmoji, setVisibleEmoji] = useState(false);
     const [fileList, setFileList] = useState([]);

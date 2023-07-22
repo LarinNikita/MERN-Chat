@@ -1,8 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { axios } from '../../core';
 
-export const fetchDialogs = createAsyncThunk('user/fetchDialogs', async () => {
+export const fetchDialogs = createAsyncThunk('dialogs/fetchDialogs', async () => {
     const { data } = await axios.get('/dialogs');
+    return data;
+});
+
+export const createDialog = createAsyncThunk('dialogs/createDialogs', async (payload) => {
+    const { data } = await axios.post('/dialogs', payload);
     return data;
 });
 

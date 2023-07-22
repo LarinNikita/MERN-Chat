@@ -108,7 +108,7 @@ const Message = ({
         >
 
             <div className="message__avatar">
-                <AvatarUser user={user} />
+                <AvatarUser user={user} size={42}/>
                 {/* <img src={avatar} alt={`Avatar ${user.fullName}`} /> */}
             </div>
 
