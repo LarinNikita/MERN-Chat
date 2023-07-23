@@ -23,7 +23,7 @@ const Chat = ({ items }) => {
             : currentChat.sender
     ) || {};
 
-    if (currentChat.sender._id === currentChat.recipient._id) {
+    if (currentChat && currentChat.sender._id === currentChat.recipient._id) {
         user = {
             fullname: 'Избранное',
         };

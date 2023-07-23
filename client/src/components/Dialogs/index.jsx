@@ -35,7 +35,7 @@ const Dialogs = ({ items, isLoading }) => {
                         <Empty description="Загрузка..." />
                     ) : (
                         filteredItems.length ? (
-                            orderBy(filteredItems, ["created_at"], ["asc"])
+                            orderBy(filteredItems, ['updatedAt'], ['desc'])
                                 .map(item => (
                                     <DialogItem
                                         key={item._id}

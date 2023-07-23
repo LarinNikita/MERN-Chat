@@ -15,6 +15,11 @@ export const sendMessages = createAsyncThunk('messages/sendMessages', async (pay
     return data;
 });
 
+export const removeMessageById = createAsyncThunk('messages/removeMessageById', async (id) => {
+    const { data } = await axios.delete(`/messages/${id}`);
+    return data;
+});
+
 const initialState = {
     messages: {
         data: [],
@@ -42,6 +47,9 @@ const messagesSlice = createSlice({
         [fetchMessages.rejected]: (state) => {
             state.messages.data = [];
             state.messages.status = 'error';
+        },
+        [removeMessageById.pending]: (state, action) => {
+            state.messages.data = state.messages.data.filter(object => object._id !== action.meta.arg);
         },
     },
 });

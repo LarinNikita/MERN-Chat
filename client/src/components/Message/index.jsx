@@ -1,12 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import { useDispatch, useSelector } from 'react-redux'
+import { removeMessageById } from '../../redux/slices/messages'
 
 import { Time, Readed, AvatarUser } from '../'
 
 import wave from '../../assets/icons/wave.svg'
-import { Button } from 'antd'
-import { CaretUpOutlined, PauseOutlined } from '@ant-design/icons'
+import { Button, Popover } from 'antd'
+import {
+    CaretUpOutlined,
+    CopyOutlined,
+    DeleteOutlined,
+    PauseOutlined
+} from '@ant-design/icons'
 
 import { convertCurrentTime } from '../../utils/helpers'
 import './Message.scss'
@@ -86,6 +93,7 @@ const MessageAudio = ({ audioSrc }) => {
 }
 
 const Message = ({
+    _id,
     avatar,
     user,
     text,
@@ -97,6 +105,26 @@ const Message = ({
     isTyping,
     audio
 }) => {
+    const dispatch = useDispatch();
+    const userData = useSelector((state) => state.user.data);
+    const [visible, setVisible] = useState(false);
+
+    const handleContextMenu = (event) => {
+        event.preventDefault();
+        setVisible(true);
+    };
+
+    const handleMenuClick = () => {
+        setVisible(false);
+        // Обработка действий меню
+    };
+
+    const deleteMessage = () => {
+        if (window.confirm('Вы действительно хотите удалить сообщение?')) {
+            dispatch(removeMessageById(_id));
+        }
+    }
+
     return (
         <div
             className={classNames('message', {
@@ -108,7 +136,7 @@ const Message = ({
         >
 
             <div className="message__avatar">
-                <AvatarUser user={user} size={42}/>
+                <AvatarUser user={user} size={42} />
                 {/* <img src={avatar} alt={`Avatar ${user.fullName}`} /> */}
             </div>
 
@@ -123,19 +151,53 @@ const Message = ({
                     </div>
                 }
                 {(text || isTyping || audio) &&
-                    <div className="message__bubble">
-                        {text && <p className='message__text'>{text}</p>}
-                        {isTyping &&
-                            <div className="message__typing">
-                                <span />
-                                <span />
-                                <span />
+                    <Popover
+                        open={visible}
+                        arrow={false}
+                        placement="right"
+                        content={
+                            <div>
+                                {userData._id === user._id ? (
+                                    <Button
+                                        icon={<DeleteOutlined />}
+                                        type="text"
+                                        size='small'
+                                        block
+                                        onClick={deleteMessage}
+                                    >
+                                        Удалить
+                                    </Button>
+                                ) : (null)
+                                }
+
+                                <Button
+                                    icon={<CopyOutlined />}
+                                    type="text"
+                                    size='small'
+                                    block
+                                >
+                                    Копировать текст
+                                </Button>
                             </div>
                         }
-                        {audio &&
-                            <MessageAudio audioSrc={audio} />
-                        }
-                    </div>
+                        trigger="contextMenu"
+                        onOpenChange={(value) => setVisible(value)}
+                    >
+                        <div className="message__bubble" onContextMenu={handleContextMenu}>
+                            {text && <p className='message__text'>{text}</p>}
+                            {isTyping &&
+                                <div className="message__typing">
+                                    <span />
+                                    <span />
+                                    <span />
+                                </div>
+                            }
+                            {audio &&
+                                <MessageAudio audioSrc={audio} />
+                            }
+
+                        </div>
+                    </Popover>
                 }
                 {createdAt && <span className="message__date">
                     <Time date={new Date(createdAt)} />

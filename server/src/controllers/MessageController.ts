@@ -47,16 +47,50 @@ class MessageController {
     }
     delete = async (req: Request, res: Response) => {
         try {
-            const id = req.params.id
-            const message = await MessageModel.findOneAndDelete({ _id: id })
+            const id = req.params.id;
+            const userId = req.user;
+
+            const message = await MessageModel.findById(id);
+
+            if (!message) {
+                return res.status(404).json({
+                    message: 'Сообщение не найдено.'
+                });
+            }
+
+            if (userId !== message.user.toString()) {
+                return res.status(403).json({
+                    message: 'У вас нет разрешения на удаление этого сообщения.'
+                });
+            }
+
+            const dialogId = message.dialog;
+
+            const messageCount = await MessageModel.countDocuments({ dialog: dialogId });
+
+            if (messageCount === 1) {
+                return res.status(403).json({
+                    message: 'В диалоге осталось только одно сообщение. Нельзя его удалить.'
+                });
+            }
+
+            await MessageModel.findOneAndDelete({ _id: id });
+
+            const previousMessage = await MessageModel.findOne({ dialog: dialogId }).sort({ createdAt: -1 });
+
+            await DialogModel.findByIdAndUpdate(
+                dialogId,
+                { lastMessages: previousMessage },
+                { new: true }
+            );
 
             res.json({
                 success: true
-            })
+            });
         } catch (err) {
-            res.status(404).json({
-                message: 'Сообщение не найдено.'
-            })
+            res.status(500).json({
+                message: 'Ошибка сервера при удалении сообщения.'
+            });
         }
     }
 }

@@ -37,6 +37,7 @@ const userSlice = createSlice({
     reducers: {
         logout: (state) => {
             state.data = null;
+            window.location.reload();
         },
     },
     extraReducers: {

@@ -58,5 +58,13 @@ body {
 }
 
 .ant-layout-sider {
-    transition: all 0s,background 0s !important;
+    transition: all 0s, background 0s !important;
+}
+
+.ant-popover {
+    width: 170px;
+
+    & .ant-popover-inner {
+        padding: 5px 0 !important;
+    }
 }
