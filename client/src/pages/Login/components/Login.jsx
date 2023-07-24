@@ -54,7 +54,7 @@ const Login = props => {
     }
 
     if (isAuth) {
-        return <Navigate to='/'/>
+        return <Navigate to='/' />
     }
 
     return (

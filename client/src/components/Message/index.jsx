@@ -16,6 +16,11 @@ import {
 } from '@ant-design/icons'
 
 import { convertCurrentTime } from '../../utils/helpers'
+import reactStringReplace from 'react-string-replace';
+import data from '@emoji-mart/data'
+import { init } from 'emoji-mart'
+
+
 import './Message.scss'
 
 // import WaveSurfer from 'https://unpkg.com/wavesurfer.js@beta'
@@ -109,21 +114,25 @@ const Message = ({
     const userData = useSelector((state) => state.user.data);
     const [visible, setVisible] = useState(false);
 
+    init({ data })
+
+
     const handleContextMenu = (event) => {
         event.preventDefault();
         setVisible(true);
-    };
-
-    const handleMenuClick = () => {
-        setVisible(false);
-        // Обработка действий меню
     };
 
     const deleteMessage = () => {
         if (window.confirm('Вы действительно хотите удалить сообщение?')) {
             dispatch(removeMessageById(_id));
         }
-    }
+        setVisible(false);
+    };
+
+    const handleCopyText = () => {
+        navigator.clipboard.writeText(text);
+        setVisible(false);
+    };
 
     return (
         <div
@@ -175,6 +184,7 @@ const Message = ({
                                     type="text"
                                     size='small'
                                     block
+                                    onClick={handleCopyText}
                                 >
                                     Копировать текст
                                 </Button>
@@ -184,7 +194,13 @@ const Message = ({
                         onOpenChange={(value) => setVisible(value)}
                     >
                         <div className="message__bubble" onContextMenu={handleContextMenu}>
-                            {text && <p className='message__text'>{text}</p>}
+                            {text &&
+                                <p className='message__text'>
+                                    {reactStringReplace(text, /:(.+?):/g, (match, i) => (
+                                        <em-emoji key={i} shortcodes={`:${match}:`}></em-emoji>
+                                    ))}
+
+                                </p>}
                             {isTyping &&
                                 <div className="message__typing">
                                     <span />

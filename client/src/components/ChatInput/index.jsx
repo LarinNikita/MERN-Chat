@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { sendMessages } from '../../redux/slices/messages'
 
 import { SmileOutlined, PaperClipOutlined, AudioOutlined, SendOutlined, DownloadOutlined } from '@ant-design/icons'
 import { Button, Input, Upload, Modal, Empty } from 'antd'
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
+import ru from '@emoji-mart/data/i18n/ru.json';
 
+import Textarea from '../TextArea'
 import './ChatInput.scss'
-import { sendMessages } from '../../redux/slices/messages'
 
 const ChatInput = () => {
     const dispatch = useDispatch();
@@ -19,11 +21,11 @@ const ChatInput = () => {
     const [fileList, setFileList] = useState([]);
 
     const onSendMessage = (selectedDialogId, value) => {
-        dispatch(sendMessages({dialog: selectedDialogId, text: value}))
+        dispatch(sendMessages({ dialog: selectedDialogId, text: value }))
     };
 
     const handleSendMessage = (e) => {
-        if (e.key === 'Enter') {
+        if (((e.key === 'Enter' && !e.shiftKey) || e.button === 0) && value.trim() !== '') {
             onSendMessage(selectedDialogId, value);
             setValue('');
         }
@@ -65,7 +67,11 @@ const ChatInput = () => {
 
     const toggleEmoji = () => {
         setVisibleEmoji(!visibleEmoji);
-    }
+    };
+
+    const addEmoji = ({ shortcodes }) => {
+        setValue((value + '' + shortcodes).trim());
+    };
 
     return (
         <div className='send'>
@@ -73,15 +79,18 @@ const ChatInput = () => {
                 <div className='send__emoji'>
                     <Picker
                         data={data}
+                        i18n={ru}
                         theme="light"
                         navPosition="bottom"
                         previewPosition="none"
                         skinTonePosition="none"
+                        onEmojiSelect={(emojiTag) => addEmoji(emojiTag)}
                     />
                 </div>
             }
-            <Input
+            <Textarea
                 size='large'
+                autoSize={{ maxRows: 8 }}
                 prefix={
                     <Button
                         onClick={toggleEmoji}
@@ -123,17 +132,11 @@ const ChatInput = () => {
                             ) : (null)}
                         </Modal>
                         {value
-                            ? <Button type="link" shape="circle" icon={<SendOutlined />} />
+                            ? <Button type="link" shape="circle" icon={<SendOutlined />} onClick={handleSendMessage} />
                             : <Button type="link" shape="circle" icon={<AudioOutlined />} />
                         }
                     </>
                 }
-                style={{
-                    borderRadius: 0,
-                    border: 'none',
-                    borderTop: '1px solid #f7f7f7',
-                    boxShadow: 'none'
-                }}
             />
         </div>
     )
