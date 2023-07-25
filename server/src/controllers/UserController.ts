@@ -184,6 +184,24 @@ class UserController {
             });
         }
     }
+    searchUsers = async (req: Request, res: Response) => {
+        const query = req.query.query;
+        try {
+            const users = await UserModel.find({
+                $or: [
+                    { fullname: { $regex: `${query}`, $options: 'i' } },
+                    { email: { $regex: `${query}`, $options: 'i' } }
+                ]
+            });
+
+            res.status(200).json(users);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({
+                message: 'Не удалось выполнить поиск пользователей.'
+            });
+        }
+    }
 }
 
 export default UserController

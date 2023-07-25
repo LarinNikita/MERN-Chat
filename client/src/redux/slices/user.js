@@ -21,6 +21,11 @@ export const fetchVerify = createAsyncThunk('user/fetchVerify', async (hash) => 
     return data;
 });
 
+export const searchUsers = createAsyncThunk('user/searchUsers', async (query) => {
+    const { data } = await axios.get(`/user/search?query=${query}`);
+    return data;
+});
+
 const initialState = {
     data: null,
     status: 'loading',
@@ -32,6 +37,7 @@ const userSlice = createSlice({
     reducers: {
         logout: (state) => {
             state.data = null;
+            window.location.reload();
         },
     },
     extraReducers: {

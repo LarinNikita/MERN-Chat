@@ -1,20 +1,45 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import orderBy from 'lodash/orderBy';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addNewDialog, fetchDialogs, updateDialog } from '../../redux/slices/dialogs';
+import { filter, orderBy } from 'lodash';
+
+import { socket } from '../../core'
 
 import { Input, Empty } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-import { filter } from 'lodash';
 
 import { DialogItem } from '../';
 
 import './Dialogs.scss';
 
-const Dialogs = ({ items, isLoading }) => {
+const Dialogs = () => {
+    const dispatch = useDispatch();
     const userData = useSelector((state) => state.user.data);
-
     const [searchValue, setSearchValue] = useState('');
-    const filteredItems = filter(items, (item) =>
+
+    const { dialogs } = useSelector((state) => state.dialogs);
+    const isLoading = dialogs.status === 'loading';
+
+    const onNewDialog = () => {
+        dispatch(fetchDialogs());
+    }
+    const onNewMessage = (data) => {
+        dispatch(updateDialog(data));
+    }
+
+    useEffect(() => {
+        dispatch(fetchDialogs());
+
+        socket.on('SERVER:DIALOG_CREATED', onNewDialog);
+        socket.on('SERVER:MESSAGE_CREATED', onNewMessage);
+        return () => {
+            socket.removeListener('SERVER:DIALOG_CREATED', onNewDialog);
+            socket.removeListener('SERVER:MESSAGE_CREATED', onNewMessage);
+        }
+    }, [dispatch]);
+
+
+    const filteredItems = filter(dialogs.data, (item) =>
         item.sender.fullname.toLowerCase().includes(searchValue.toLowerCase()) ||
         item.recipient.fullname.toLowerCase().includes(searchValue.toLowerCase())
     );
@@ -35,7 +60,7 @@ const Dialogs = ({ items, isLoading }) => {
                         <Empty description="Загрузка..." />
                     ) : (
                         filteredItems.length ? (
-                            orderBy(filteredItems, ["created_at"], ["asc"])
+                            orderBy(filteredItems, ['updatedAt'], ['desc'])
                                 .map(item => (
                                     <DialogItem
                                         key={item._id}

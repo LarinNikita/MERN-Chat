@@ -1,0 +1,28 @@
+.textarea {
+    display: flex;
+    align-items: end;
+
+    padding: 5px 10px;
+
+    border-top: 1px solid #f7f7f7;
+
+    textarea {
+        border: none;
+    }
+
+    &__prefix {
+        display: flex;
+        margin-bottom: 4.5px;
+    }
+
+    &__suffix {
+        display: flex;
+        margin-bottom: 4.5px;
+    }
+}
+
+.ant-input:focus ,
+.ant-input:active {
+    box-shadow: none !important;
+    border-color: none !important;
+}

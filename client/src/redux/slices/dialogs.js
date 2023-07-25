@@ -1,8 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { axios } from '../../core';
 
-export const fetchDialogs = createAsyncThunk('user/fetchDialogs', async () => {
+export const fetchDialogs = createAsyncThunk('dialogs/fetchDialogs', async () => {
     const { data } = await axios.get('/dialogs');
+    return data;
+});
+
+export const createDialog = createAsyncThunk('dialogs/createDialogs', async (payload) => {
+    const { data } = await axios.post('/dialogs', payload);
     return data;
 });
 
@@ -20,7 +25,16 @@ const dialogsSlice = createSlice({
     reducers: {
         setCurrentDialogId: (state, action) => {
             state.currentDialogId = action.payload;
-        }
+        },
+        updateDialog: (state, action) => {
+
+          console.log(action.payload)
+          const dialog = state.dialogs.data.find(dialog => dialog._id === action.payload.dialog._id);
+         
+          if (dialog) {
+            dialog.lastMessages = action.payload;
+          }
+        },
     },
     extraReducers: {
         [fetchDialogs.pending]: (state) => {
@@ -38,6 +52,6 @@ const dialogsSlice = createSlice({
     },
 });
 
-export const { setCurrentDialogId } = dialogsSlice.actions;
+export const { setCurrentDialogId, updateDialog } = dialogsSlice.actions;
 
 export const dialogsReducer = dialogsSlice.reducer;

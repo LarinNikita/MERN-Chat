@@ -9,23 +9,24 @@ import { ChatInput, Messages } from '../../components'
 const { Header, Content } = Layout;
 const { Text } = Typography;
 
-const Chat = ({ items }) => {
-
+const Chat = () => {
     const userData = useSelector((state) => state.user.data);
 
+    const { dialogs } = useSelector((state) => state.dialogs);
     const selectedDialogId = useSelector((state) => state.dialogs.currentDialogId);
 
-    const currentChat = items.find((item) => item._id === selectedDialogId);
+    const currentChat = dialogs.data.find((item) => item._id === selectedDialogId);
 
-    let user;
-    if (currentChat) {
-        if (userData._id === currentChat.recipient._id) {
-            user = currentChat.sender;
-        } else {
-            user = currentChat.recipient;
-        }
-    } else {
-        user = null;
+    let user = currentChat && (
+        currentChat.sender._id === userData._id
+            ? currentChat.recipient
+            : currentChat.sender
+    ) || {};
+
+    if (currentChat && currentChat.sender._id === currentChat.recipient._id) {
+        user = {
+            fullname: 'Избранное',
+        };
     }
 
     return (
@@ -37,10 +38,12 @@ const Chat = ({ items }) => {
                         {user.fullname}
                     </Text>
 
-                    <Badge
-                        status={user.isOnline ? "success" : "default"}
-                        text={<Text type='secondary'>{user.isOnline ? "Онлайн" : "Офлайн"} </Text>}
-                    />
+                    {user.fullname === 'Избранное' ? null : (
+                        <Badge
+                            status={user.isOnline ? "success" : "default"}
+                            text={<Text type='secondary'>{user.isOnline ? "Онлайн" : "Офлайн"} </Text>}
+                        />
+                    )}
 
                 </div>
                 <Button
