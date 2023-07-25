@@ -65,8 +65,8 @@ const DialogItem = ({ _id, sender, recipient, lastMessages, unread, isMe }) => {
             <div className='dialogs__item-avatar'>
                 <Badge
                     color='green'
-                    style={{ padding: 5, border: '2.3px solid #fff' }}
-                    offset={[-7, 37]}
+                    style={{ padding: 4, border: '1pt solid #fff' }}
+                    offset={[-8, 37]}
                     dot={user.isOnline}
                 >
                     <AvatarUser user={user} size={42} />
@@ -97,7 +97,7 @@ const DialogItem = ({ _id, sender, recipient, lastMessages, unread, isMe }) => {
                     ) : (
                         (unread > 0)
                             ? (<Badge color='#fd7967' style={{ fontSize: 12 }} count={unread} />)
-                            : (<Readed isMe={isMe} isReaded={false} />)
+                            : (<Readed isMe={isMe} isReaded={lastMessages.readed} />)
                     )}
                 </div>
             </div>

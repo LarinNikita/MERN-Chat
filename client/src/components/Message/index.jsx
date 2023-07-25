@@ -105,7 +105,7 @@ const Message = ({
     date,
     createdAt,
     isMe,
-    isReaded,
+    readed,
     attachments,
     isTyping,
     audio
@@ -220,7 +220,7 @@ const Message = ({
             </div>
 
             <div className='message__check'>
-                <Readed isMe={isMe} isReaded={isReaded} />
+                <Readed isMe={isMe} isReaded={readed} />
             </div>
 
         </div>

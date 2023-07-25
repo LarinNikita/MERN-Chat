@@ -11,12 +11,23 @@ class MessageController {
     index = async (req: Request, res: Response) => {
         try {
             const dialogId = req.params.id;
-            const message = await MessageModel
+            const userId = req.user;
+
+            const messages = await MessageModel
                 .find({ dialog: dialogId })
                 .populate('dialog')
                 .populate({ path: 'user', select: 'email fullname' })
                 .exec();
-            res.json(message);
+
+            messages.forEach((message) => {
+                if (userId?.toString() !== message.user._id.toString()) {
+                    message.readed = true;
+                }
+            });
+
+            await Promise.all(messages.map((message) => message.save()));
+
+            res.json(messages);
         } catch (err) {
             res.status(500).json({
                 message: 'Не удалось получить сообщение.'

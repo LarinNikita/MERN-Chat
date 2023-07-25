@@ -4,7 +4,7 @@ export interface IMessage extends Document {
     user: mongoose.Types.ObjectId;
     text?: String;
     dialog: mongoose.Types.ObjectId;
-    read?: boolean;
+    readed: boolean;
 }
 
 const MessageSchema = new mongoose.Schema(
@@ -23,7 +23,7 @@ const MessageSchema = new mongoose.Schema(
             ref: 'Dialog',
             required: true
         },
-        read: {
+        readed: {
             type: Boolean,
             default: false
         }
