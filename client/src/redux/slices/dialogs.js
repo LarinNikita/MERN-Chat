@@ -25,7 +25,16 @@ const dialogsSlice = createSlice({
     reducers: {
         setCurrentDialogId: (state, action) => {
             state.currentDialogId = action.payload;
-        }
+        },
+        updateDialog: (state, action) => {
+
+          console.log(action.payload)
+          const dialog = state.dialogs.data.find(dialog => dialog._id === action.payload.dialog._id);
+         
+          if (dialog) {
+            dialog.lastMessages = action.payload;
+          }
+        },
     },
     extraReducers: {
         [fetchDialogs.pending]: (state) => {
@@ -43,6 +52,6 @@ const dialogsSlice = createSlice({
     },
 });
 
-export const { setCurrentDialogId } = dialogsSlice.actions;
+export const { setCurrentDialogId, updateDialog } = dialogsSlice.actions;
 
 export const dialogsReducer = dialogsSlice.reducer;

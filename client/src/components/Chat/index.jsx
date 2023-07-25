@@ -9,13 +9,13 @@ import { ChatInput, Messages } from '../../components'
 const { Header, Content } = Layout;
 const { Text } = Typography;
 
-const Chat = ({ items }) => {
-
+const Chat = () => {
     const userData = useSelector((state) => state.user.data);
 
+    const { dialogs } = useSelector((state) => state.dialogs);
     const selectedDialogId = useSelector((state) => state.dialogs.currentDialogId);
 
-    const currentChat = items.find((item) => item._id === selectedDialogId);
+    const currentChat = dialogs.data.find((item) => item._id === selectedDialogId);
 
     let user = currentChat && (
         currentChat.sender._id === userData._id

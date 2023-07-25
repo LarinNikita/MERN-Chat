@@ -3,10 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { sendMessages } from '../../redux/slices/messages'
 
 import { SmileOutlined, PaperClipOutlined, AudioOutlined, SendOutlined, DownloadOutlined } from '@ant-design/icons'
-import { Button, Input, Upload, Modal, Empty } from 'antd'
+import { Button, Upload, Modal, Empty } from 'antd'
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import ru from '@emoji-mart/data/i18n/ru.json';
+
+import { useClickOutside } from "../../utils/helpers"
 
 import Textarea from '../TextArea'
 import './ChatInput.scss'
@@ -73,10 +75,14 @@ const ChatInput = () => {
         setValue((value + '' + shortcodes).trim());
     };
 
+    const pickerRef = useClickOutside(() => {
+        setVisibleEmoji(false);
+    });
+
     return (
         <div className='send'>
             {visibleEmoji &&
-                <div className='send__emoji'>
+                <div className='send__emoji' ref={pickerRef}>
                     <Picker
                         data={data}
                         i18n={ru}
@@ -106,7 +112,7 @@ const ChatInput = () => {
                     <>
                         <Button type="link" onClick={() => setVisible(true)} icon={<PaperClipOutlined />} />
                         <Modal
-                            title="Загрузка файлов"
+                            title="Загрузка файлов (максимум 5)"
                             open={visible}
                             onCancel={handleCancel}
                             footer={[

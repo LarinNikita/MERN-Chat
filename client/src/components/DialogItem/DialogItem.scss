@@ -1,7 +1,6 @@
 .dialogs__item {
     display: flex;
-    // width: 300px;
-    // margin-bottom: 20px;
+    align-items: center;
     padding: 10px 20px;
     height: 66px;
     cursor: pointer;
@@ -9,7 +8,7 @@
     &--selected,
     &:hover {
         // background-color: #f3f7ff;
-        background-color: #cadcff;
+        background-color: #e0ebff;
     }
 
     &-avatar {

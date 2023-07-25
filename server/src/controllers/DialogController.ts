@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
-import socket from 'socket.io'
 import { DialogModel, MessageModel } from '../models'
+import socket from 'socket.io'
 
 class DialogController {
     io: socket.Server;
@@ -28,7 +28,6 @@ class DialogController {
     }
     create = async (req: Request, res: Response) => {
         try {
-            // const { sender, recipient } = req.body;
             const postData = {
                 sender: req.user,
                 recipient: req.body.recipient

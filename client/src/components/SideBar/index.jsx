@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout, searchUsers } from '../../redux/slices/user';
-import { createDialog, fetchDialogs } from '../../redux/slices/dialogs';
+import { createDialog } from '../../redux/slices/dialogs';
 import {
     Layout,
     Button,
@@ -27,7 +27,7 @@ const { Title } = Typography;
 const { Option } = Select;
 const { TextArea } = Input;
 
-const SideBar = ({ items, isLoading }) => {
+const SideBar = () => {
     const dispatch = useDispatch();
     const naviguate = useNavigate();
     const [collapsed, setCollapsed] = useState();
@@ -176,10 +176,7 @@ const SideBar = ({ items, isLoading }) => {
                 </Modal>
             </Header>
             <Content className='sidebar__content'>
-                <Dialogs
-                    items={items}
-                    isLoading={isLoading}
-                />
+                <Dialogs />
             </Content>
         </Sider>
     )

@@ -123,9 +123,9 @@ const Message = ({
     };
 
     const deleteMessage = () => {
-        if (window.confirm('Вы действительно хотите удалить сообщение?')) {
-            dispatch(removeMessageById(_id));
-        }
+        // if (window.confirm('Вы действительно хотите удалить сообщение?')) {
+        dispatch(removeMessageById(_id));
+        // }
         setVisible(false);
     };
 
@@ -199,7 +199,6 @@ const Message = ({
                                     {reactStringReplace(text, /:(.+?):/g, (match, i) => (
                                         <em-emoji key={i} shortcodes={`:${match}:`}></em-emoji>
                                     ))}
-
                                 </p>}
                             {isTyping &&
                                 <div className="message__typing">

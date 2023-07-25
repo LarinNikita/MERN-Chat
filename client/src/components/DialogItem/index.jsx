@@ -10,6 +10,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentDialogId } from '../../redux/slices/dialogs'
 
 import Star from '../../assets/star.png'
+import reactStringReplace from 'react-string-replace';
+import data from '@emoji-mart/data'
+import { init } from 'emoji-mart'
 
 import './DialogItem.scss'
 
@@ -85,7 +88,9 @@ const DialogItem = ({ _id, sender, recipient, lastMessages, unread, isMe }) => {
                         ) : (
                             userData._id === lastMessages.user._id ? 'Вы: ' : null
                         )}
-                        {lastMessages?.text}
+                        {reactStringReplace(lastMessages?.text, /:(.+?):/g, (match, i) => (
+                            <em-emoji key={i} shortcodes={`:${match}:`}></em-emoji>
+                        ))}
                     </Text>
                     {sender._id === recipient._id ? (
                         null
