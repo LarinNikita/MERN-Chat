@@ -1,15 +1,17 @@
 import express from "express"
 import cors from 'cors'
 import {Server} from 'socket.io'
-import { DialogCtrl, MessageCtrl, UserCtrl } from "../controllers"
+import { DialogCtrl, MessageCtrl, UserCtrl, UploadCtrl } from "../controllers"
 import { checkAuth, updateLastVisit } from "../middleware"
 import { login, registration } from "../validations";
 import { handlValidation } from "../utils";
+import uploader from "./uploader"
 
 const createRoutes = (app: express.Express, io: Server) => {
     const UserController = new UserCtrl(io)
     const DialogController = new DialogCtrl(io)
     const MessageController = new MessageCtrl(io)
+    const UploadController = new UploadCtrl();
 
     app.use(express.json())
     app.use(cors())
@@ -31,6 +33,9 @@ const createRoutes = (app: express.Express, io: Server) => {
     app.post('/messages', MessageController.create)
     app.get('/messages/:id', MessageController.index)
     app.delete('/messages/:id', MessageController.delete)
+
+    app.post('/files', uploader.single('image'), UploadController.create)
+    app.delete('/files/:id', UploadController.delete)
 };
 
 export default createRoutes;

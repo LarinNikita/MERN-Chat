@@ -5,6 +5,7 @@ export interface IMessage extends Document {
     text?: String;
     dialog: mongoose.Types.ObjectId;
     readed: boolean;
+    attachments: mongoose.Types.ObjectId;
 }
 
 const MessageSchema = new mongoose.Schema(
@@ -26,10 +27,15 @@ const MessageSchema = new mongoose.Schema(
         readed: {
             type: Boolean,
             default: false
-        }
+        },
+        attachments: [{
+            type: Schema.Types.ObjectId,
+            ref: 'UploadFile'
+        }]
     },
     {
-        timestamps: true
+        timestamps: true,
+        usePushEach: true
     }
 )
 

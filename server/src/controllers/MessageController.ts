@@ -17,6 +17,7 @@ class MessageController {
                 .find({ dialog: dialogId })
                 .populate('dialog')
                 .populate({ path: 'user', select: 'email fullname' })
+                .populate('attachments')
                 .exec();
 
             messages.forEach((message) => {
@@ -39,9 +40,14 @@ class MessageController {
             const doc = await new MessageModel({
                 user: req.user,
                 dialog: req.body.dialog,
-                text: req.body.text
-            }).populate('dialog user');
+                text: req.body.text,
+                attachments: req.body.attachments
+            }).populate('dialog user attachments');
             const message = await doc.save()
+
+            // if (req.body.attachments) {
+            //     message.attachments.push()
+            // }
 
             DialogModel.findOneAndUpdate(
                 { _id: req.body.dialog },

@@ -6,6 +6,8 @@
     display: flex;
     margin-bottom: 15px;
 
+    // position: relative;
+
     &__avatar {
         margin-right: 10px;
         align-self: flex-end;
@@ -50,13 +52,14 @@
         &-item {
             margin-right: 10px;
             margin-bottom: 5px;
-            cursor: pointer;
 
-            img {
-                width: 45px;
-                height: 45px;
-                border-radius: 8px;
-                object-fit: cover;
+            .ant-image {
+                img {
+                    width: 90px;
+                    height: 90px;
+                    border-radius: 8px;
+                    object-fit: cover;
+                }
             }
         }
     }

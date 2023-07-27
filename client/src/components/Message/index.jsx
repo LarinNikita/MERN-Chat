@@ -7,7 +7,7 @@ import { removeMessageById } from '../../redux/slices/messages'
 import { Time, Readed, AvatarUser } from '../'
 
 import wave from '../../assets/icons/wave.svg'
-import { Button, Popover } from 'antd'
+import { Button, Image, Popover } from 'antd'
 import {
     CaretUpOutlined,
     CopyOutlined,
@@ -139,7 +139,7 @@ const Message = ({
             className={classNames('message', {
                 'message--isme': isMe,
                 'message--is-typing': isTyping,
-                'message--image': attachments && attachments.length === 1,
+                'message--image': attachments && attachments.length === 1 && !text,
                 'message--is-audio': audio,
             })}
         >
@@ -152,11 +152,16 @@ const Message = ({
             <div className="message__content">
                 {attachments &&
                     <div className="message__attachments">
-                        {attachments.map((item, index) => (
-                            <div className="message__attachments-item" key={index}>
-                                <img src={item.url} alt={item.filename} />
-                            </div>
-                        ))}
+                        <Image.PreviewGroup >
+                            {attachments.map((item, index) => (
+                                <div className="message__attachments-item" key={index}>
+                                    <Image
+                                        src={item.url}
+                                        alt={item.filename}
+                                    />
+                                </div>
+                            ))}
+                        </Image.PreviewGroup>
                     </div>
                 }
                 {(text || isTyping || audio) &&

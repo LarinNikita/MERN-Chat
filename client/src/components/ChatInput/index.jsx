@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { sendMessages } from '../../redux/slices/messages'
 
-import { SmileOutlined, PaperClipOutlined, AudioOutlined, SendOutlined, DownloadOutlined } from '@ant-design/icons'
-import { Button, Upload, Modal, Empty } from 'antd'
+import { SmileOutlined, PaperClipOutlined, AudioOutlined, SendOutlined } from '@ant-design/icons'
+import { Button, Input } from 'antd'
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 import ru from '@emoji-mart/data/i18n/ru.json';
@@ -12,6 +12,7 @@ import { useClickOutside } from "../../utils/helpers"
 
 import Textarea from '../TextArea'
 import './ChatInput.scss'
+import UploadModal from '../Upload'
 
 const ChatInput = () => {
     const dispatch = useDispatch();
@@ -20,7 +21,6 @@ const ChatInput = () => {
     const [value, setValue] = useState('');
     const [visible, setVisible] = useState(false);
     const [visibleEmoji, setVisibleEmoji] = useState(false);
-    const [fileList, setFileList] = useState([]);
 
     const onSendMessage = (selectedDialogId, value) => {
         dispatch(sendMessages({ dialog: selectedDialogId, text: value }))
@@ -31,40 +31,6 @@ const ChatInput = () => {
             onSendMessage(selectedDialogId, value);
             setValue('');
         }
-    };
-
-    const handleUpload = () => {
-        // Здесь можно добавить логику для загрузки файлов на сервер
-        // Например, использовать fetch или axios для отправки файлов на сервер
-        console.log('Загрузка файлов:', fileList);
-        // После успешной загрузки файлов можно сбросить список файлов
-        setFileList([]);
-        // message.success('Файлы успешно загружены!');
-        setVisible(false);
-    };
-
-    const handleCancel = () => {
-        // При отмене загрузки файлов можно сбросить список файлов
-        setVisible(false);
-        setFileList([]);
-    };
-
-    const handleFileChange = (info) => {
-        let fileList = [...info.fileList];
-
-        // Ограничение на количество загружаемых файлов
-        fileList = fileList.slice(-5);
-
-        // Обновление списка файлов
-        fileList = fileList.map((file) => {
-            if (file.response) {
-                // Обработка ответа от сервера после загрузки файла
-                file.url = file.response.url;
-            }
-            return file;
-        });
-
-        setFileList(fileList);
     };
 
     const toggleEmoji = () => {
@@ -110,33 +76,14 @@ const ChatInput = () => {
                 onKeyUp={handleSendMessage}
                 suffix={
                     <>
-                        <Button type="link" onClick={() => setVisible(true)} icon={<PaperClipOutlined />} />
-                        <Modal
-                            title="Загрузка файлов (максимум 5)"
-                            open={visible}
-                            onCancel={handleCancel}
-                            footer={[
-                                <Button key="cancel" onClick={handleCancel}>
-                                    Отмена
-                                </Button>,
-                                <Button key="upload" type="primary" onClick={handleUpload} disabled={fileList.length === 0}>
-                                    Загрузить
-                                </Button>,
-                            ]}
-                        >
-                            <Upload
-                                beforeUpload={() => false} // Отключение отправки файлов на сервер
-                                multiple
-                                onChange={handleFileChange}
-                                fileList={fileList}
-                                listType='picture'
-                            >
-                                <Button type="dashed" icon={<DownloadOutlined />}>Выберите файлы</Button>
-                            </Upload>
-                            {fileList.length === 0 ? (
-                                <Empty description="Нет файлов" />
-                            ) : (null)}
-                        </Modal>
+                        <UploadModal
+                            button={
+                                <Button type='link' icon={<PaperClipOutlined />} />
+                            }
+                            input={
+                                <Input placeholder='Подпись'/>
+                            }
+                        />
                         {value
                             ? <Button type="link" shape="circle" icon={<SendOutlined />} onClick={handleSendMessage} />
                             : <Button type="link" shape="circle" icon={<AudioOutlined />} />
